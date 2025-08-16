@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/emersongarrido/reclama-golpe/assets/7884faa5-4221-4b34-bf77-e6b12b54018d.png" alt="Reclama Golpe Logo" width="600" />
+  <img src="https://raw.githubusercontent.com/EmersonGarrido/reclama-golpe/refs/heads/main/assets/7884faa5-4221-4b34-bf77-e6b12b54018d.png" alt="Reclama Golpe Logo" width="600" />
   
   # 🚨 Reclama Golpe
   

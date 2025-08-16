@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/emersongarrido/reclama-golpe/assets/your-username/98c2efb1-a924-48dd-babf-ec999d8a32db.png" alt="Reclama Golpe Logo" width="600" />
+  <img src="https://github.com/emersongarrido/reclama-golpe/assets/7884faa5-4221-4b34-bf77-e6b12b54018d.png" alt="Reclama Golpe Logo" width="600" />
   
   # 🚨 Reclama Golpe
   
@@ -28,6 +28,7 @@
 ## ✨ Funcionalidades
 
 ### Para Usuários
+
 - 📝 **Denúncias Detalhadas** - Relate golpes com evidências (prints, links, documentos)
 - 🔍 **Busca Inteligente** - Pesquise por empresa, tipo de golpe, CPF/CNPJ suspeito
 - 💬 **Comunidade Ativa** - Comente, valide e compartilhe denúncias
@@ -36,6 +37,7 @@
 - 🛡️ **Denúncia Anônima** - Opção de reportar sem expor sua identidade
 
 ### Para a Comunidade
+
 - 📈 **Estatísticas Públicas** - Dados abertos sobre golpes mais comuns
 - 🏆 **Sistema de Reputação** - Reconhecimento para contribuidores ativos
 - 📚 **Central de Conhecimento** - Guias de prevenção e identificação de fraudes
@@ -53,12 +55,14 @@
 ### Instalação
 
 1. **Clone o repositório**
+
 ```bash
 git clone https://github.com/emersongarrido/reclama-golpe.git
 cd reclama-golpe
 ```
 
 2. **Instale as dependências**
+
 ```bash
 pnpm install
 # ou
@@ -66,18 +70,21 @@ npm install
 ```
 
 3. **Configure as variáveis de ambiente**
+
 ```bash
 cp .env.example .env.local
 # Edite o arquivo .env.local com suas configurações
 ```
 
 4. **Configure o banco de dados**
+
 ```bash
 pnpm db:migrate
 pnpm db:seed # Opcional: dados de exemplo
 ```
 
 5. **Inicie o projeto em modo desenvolvimento**
+
 ```bash
 pnpm dev
 # ou para iniciar serviços específicos:
@@ -86,6 +93,7 @@ pnpm dev:api   # Backend NestJS
 ```
 
 6. **Acesse a aplicação**
+
 - Frontend: http://localhost:3000
 - API: http://localhost:3001
 - Documentação API: http://localhost:3001/swagger
@@ -95,6 +103,7 @@ pnpm dev:api   # Backend NestJS
 ### Stack Tecnológica
 
 #### Frontend
+
 - **Framework:** Next.js 14 com App Router
 - **UI:** shadcn/ui + Tailwind CSS
 - **Estado:** Zustand + TanStack Query
@@ -102,6 +111,7 @@ pnpm dev:api   # Backend NestJS
 - **Real-time:** Socket.io Client
 
 #### Backend
+
 - **Framework:** NestJS com TypeScript
 - **ORM:** Prisma
 - **Autenticação:** JWT + Passport
@@ -110,6 +120,7 @@ pnpm dev:api   # Backend NestJS
 - **Fila:** Bull
 
 #### Infraestrutura
+
 - **Database:** PostgreSQL
 - **Storage:** AWS S3 / Cloudflare R2
 - **Deploy:** Vercel (Frontend) + Railway/Render (Backend)
@@ -184,6 +195,7 @@ Adoramos contribuições da comunidade! Este é um projeto open-source e toda aj
 ## 🗺️ Roadmap
 
 ### Fase 1 - MVP (Em desenvolvimento)
+
 - [x] Setup inicial do monorepo
 - [x] Autenticação e autorização
 - [ ] CRUD de denúncias
@@ -192,6 +204,7 @@ Adoramos contribuições da comunidade! Este é um projeto open-source e toda aj
 - [ ] Upload de evidências
 
 ### Fase 2 - Expansão
+
 - [ ] Sistema de categorização avançado
 - [ ] Dashboard com estatísticas
 - [ ] Moderação com IA
@@ -199,6 +212,7 @@ Adoramos contribuições da comunidade! Este é um projeto open-source e toda aj
 - [ ] API pública
 
 ### Fase 3 - Maturidade
+
 - [ ] Integração com órgãos oficiais
 - [ ] Sistema de verificação automatizada
 - [ ] Machine Learning para detecção de padrões

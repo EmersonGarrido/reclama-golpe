@@ -1,0 +1,68 @@
+# Deploy Configuration Example
+# Copy this file to deploy.config and fill with your values
+
+# Server Configuration
+SERVER_USER="ubuntu"
+SERVER_IP="your.server.ip.here"
+SERVER_PORT="22"
+
+# Domain Configuration
+DOMAIN="reclamagolpe.com.br"
+WWW_DOMAIN="www.reclamagolpe.com.br"
+ADMIN_EMAIL="admin@reclamagolpe.com.br"
+
+# Database Configuration
+DB_NAME="reclamagolpe"
+DB_USER="reclamagolpe_user"
+DB_PASSWORD="your_secure_password_here"
+DB_HOST="localhost"
+DB_PORT="5432"
+
+# Application Configuration
+APP_PORT="3333"
+WEB_PORT="3000"
+NODE_VERSION="20"
+
+# JWT Configuration
+JWT_SECRET="your_jwt_secret_here_min_32_chars"
+
+# GitHub Configuration
+GITHUB_REPO="https://github.com/EmersonGarrido/reclama-golpe.git"
+GITHUB_BRANCH="main"
+
+# Paths
+INSTALL_PATH="/var/www/reclamagolpe"
+NGINX_SITES_PATH="/etc/nginx/sites-available"
+NGINX_ENABLED_PATH="/etc/nginx/sites-enabled"
+
+# SSL Configuration (Let's Encrypt)
+USE_SSL="true"
+CERTBOT_EMAIL="${ADMIN_EMAIL}"
+
+# PM2 Configuration
+PM2_APP_NAME="reclamagolpe-api"
+PM2_WEB_NAME="reclamagolpe-web"
+PM2_INSTANCES="max"
+
+# Environment
+NODE_ENV="production"
+
+# Cloudflare (optional)
+USE_CLOUDFLARE="false"
+CLOUDFLARE_API_TOKEN=""
+CLOUDFLARE_ZONE_ID=""
+
+# Backup Configuration
+BACKUP_PATH="/var/backups/reclamagolpe"
+BACKUP_RETENTION_DAYS="30"
+
+# Monitoring
+ENABLE_MONITORING="true"
+MONITORING_WEBHOOK_URL=""
+
+# Memory Limits
+NODE_MAX_MEMORY="2048"  # MB
+
+# Log Configuration
+LOG_PATH="/var/log/reclamagolpe"
+LOG_LEVEL="info"

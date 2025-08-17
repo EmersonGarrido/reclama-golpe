@@ -1,6 +1,14 @@
 {
   "name": "reclama-golpe",
+  "version": "1.0.0",
   "private": true,
+  "description": "Plataforma colaborativa para denunciar e prevenir golpes online",
+  "author": "Emerson Garrido <emerson@garrido.dev>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EmersonGarrido/reclama-golpe.git"
+  },
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",

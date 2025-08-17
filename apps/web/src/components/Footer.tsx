@@ -142,6 +142,9 @@ export default function Footer() {
             <p className="text-gray-500 text-xs">
               Desenvolvido para proteger os brasileiros de golpes online
             </p>
+            <p className="text-gray-600 text-xs mt-2">
+              Versão 1.0.0 | Release Inicial
+            </p>
           </div>
         </div>
       </div>

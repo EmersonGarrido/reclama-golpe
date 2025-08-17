@@ -17,7 +17,7 @@ export default function SystemInfo() {
     fetch('/build-info.json')
       .then(res => res.json())
       .then(data => {
-        setBuildInfo(prev => ({ ...prev, ...data }))
+        setBuildInfo((prev: any) => ({ ...prev, ...data }))
         
         // Calculate uptime
         if (data.timestamp) {

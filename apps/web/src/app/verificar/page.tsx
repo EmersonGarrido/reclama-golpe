@@ -31,7 +31,7 @@ export default function VerificarPage() {
     // Remove www if exists
     cleanUrl = cleanUrl.replace(/^www\./, '')
     // Remove path and query string
-    cleanUrl = cleanUrl.split('/')[0].split('?')[0]
+    cleanUrl = cleanUrl.split('/')[0]?.split('?')[0] || ''
     return cleanUrl.toLowerCase()
   }
 

@@ -72,15 +72,16 @@ async function fetchCategoryScams(category: string) {
 export default async function CategoriaPage({
   params
 }: {
-  params: { categoria: string }
+  params: Promise<{ categoria: string }>
 }) {
-  const category = categoryInfo[params.categoria as keyof typeof categoryInfo]
+  const { categoria } = await params
+  const category = categoryInfo[categoria as keyof typeof categoryInfo]
   
   if (!category) {
     notFound()
   }
 
-  const scams = await fetchCategoryScams(params.categoria)
+  const scams = await fetchCategoryScams(categoria)
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -171,7 +172,7 @@ export default async function CategoriaPage({
                 key={key}
                 href={`/categoria/${key}`}
                 className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                  key === params.categoria
+                  key === categoria
                     ? 'bg-red-600 text-white'
                     : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                 }`}

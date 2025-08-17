@@ -30,7 +30,7 @@ export default function SobreClient() {
     return () => clearTimeout(timer)
   }, [])
 
-  const containerVariants = {
+  const containerVariants: any = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -41,7 +41,7 @@ export default function SobreClient() {
     }
   }
 
-  const itemVariants = {
+  const itemVariants: any = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
@@ -50,7 +50,7 @@ export default function SobreClient() {
     }
   }
 
-  const sectionVariants = {
+  const sectionVariants: any = {
     hidden: { opacity: 0, y: 40 },
     visible: {
       opacity: 1,

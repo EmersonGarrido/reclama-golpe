@@ -49,9 +49,34 @@ const stepSchemas = {
 
 // Schema completo
 const fullSchema = yup.object().shape({
-  ...stepSchemas.step1.fields,
-  ...stepSchemas.step2.fields,
-  ...stepSchemas.step3.fields,
+  title: yup.string()
+    .required('Título é obrigatório')
+    .min(10, 'Título deve ter pelo menos 10 caracteres')
+    .max(200, 'Título deve ter no máximo 200 caracteres'),
+  category: yup.string()
+    .required('Categoria é obrigatória'),
+  description: yup.string()
+    .required('Descrição é obrigatória')
+    .min(50, 'Descrição deve ter pelo menos 50 caracteres')
+    .max(5000, 'Descrição deve ter no máximo 5000 caracteres'),
+  scammerName: yup.string()
+    .max(100, 'Nome deve ter no máximo 100 caracteres'),
+  scammerWebsite: yup.string()
+    .url('URL inválida')
+    .max(255, 'URL deve ter no máximo 255 caracteres'),
+  scammerPhone: yup.string()
+    .max(20, 'Telefone deve ter no máximo 20 caracteres'),
+  scammerEmail: yup.string()
+    .email('E-mail inválido')
+    .max(100, 'E-mail deve ter no máximo 100 caracteres'),
+  amountLost: yup.number()
+    .min(0, 'Valor deve ser positivo')
+    .nullable()
+    .transform((value) => (isNaN(value) ? null : value)),
+  dateOccurred: yup.date()
+    .max(new Date(), 'Data não pode ser futura')
+    .nullable(),
+  anonymous: yup.boolean(),
 })
 
 type FormData = yup.InferType<typeof fullSchema>
@@ -148,7 +173,7 @@ export default function DenunciarPage() {
     setValue,
     trigger,
   } = useForm<FormData>({
-    resolver: yupResolver(fullSchema),
+    resolver: yupResolver(fullSchema) as any,
     mode: 'onChange',
     defaultValues: {
       anonymous: false,
@@ -335,7 +360,7 @@ export default function DenunciarPage() {
     out: { opacity: 0, x: -50 }
   }
 
-  const pageTransition = {
+  const pageTransition: any = {
     type: 'tween',
     ease: 'anticipate',
     duration: 0.5

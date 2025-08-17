@@ -197,15 +197,6 @@ export default function LoginPage() {
             </p>
           </div>
         </div>
-
-        {/* Contas de teste */}
-        <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <p className="text-sm text-blue-800">
-            <strong>Contas de teste:</strong><br />
-            Admin: user1@example.com / senha123<br />
-            User: user2@example.com / senha123
-          </p>
-        </div>
       </div>
     </div>
   )

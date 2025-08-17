@@ -13,7 +13,7 @@ export class UpdateUserDto {
   bio?: string;
 
   @IsOptional()
-  @IsUrl()
+  @IsString()
   avatar?: string;
 }
 

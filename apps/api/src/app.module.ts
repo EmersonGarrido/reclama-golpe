@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ScamsModule } from './scams/scams.module';
 import { CategoriesModule } from './categories/categories.module';
+import { CommentsModule } from './comments/comments.module';
+import { AdminModule } from './admin/admin.module';
 import { WebsocketModule } from './websocket/websocket.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
@@ -21,6 +23,8 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     UsersModule,
     ScamsModule,
     CategoriesModule,
+    CommentsModule,
+    AdminModule,
     WebsocketModule,
   ],
   controllers: [AppController],

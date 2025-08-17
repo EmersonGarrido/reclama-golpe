@@ -26,13 +26,19 @@ export default function GolpesPage() {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333'}/categories`)
-      const data = await response.json()
-      
-      // Add "Todas" option at the beginning
+      // Use the enum values directly for now
       const categoriesWithAll = [
         { value: '', label: 'Todas' },
-        ...data.map((cat: any) => ({ value: cat.slug, label: cat.name }))
+        { value: 'PHISHING', label: 'Phishing' },
+        { value: 'PYRAMID_SCHEME', label: 'Pirâmide Financeira' },
+        { value: 'FAKE_ECOMMERCE', label: 'E-commerce Falso' },
+        { value: 'INVESTMENT_FRAUD', label: 'Fraude de Investimento' },
+        { value: 'ROMANCE_SCAM', label: 'Golpe do Amor' },
+        { value: 'JOB_SCAM', label: 'Golpe do Emprego' },
+        { value: 'LOTTERY_SCAM', label: 'Golpe da Loteria' },
+        { value: 'TECH_SUPPORT', label: 'Suporte Técnico Falso' },
+        { value: 'CRYPTOCURRENCY', label: 'Golpe de Criptomoedas' },
+        { value: 'OTHER', label: 'Outros' }
       ]
       setCategories(categoriesWithAll)
     } catch (error) {

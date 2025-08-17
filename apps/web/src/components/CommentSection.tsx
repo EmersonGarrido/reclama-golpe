@@ -27,12 +27,23 @@ export default function CommentSection({ scamId, initialComments = [], commentCo
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
-    // Check if user is logged in (simplified for now)
-    const token = localStorage.getItem('token')
-    setIsLoggedIn(!!token)
+    // Check if user is logged in
+    const checkAuth = () => {
+      const token = localStorage.getItem('token')
+      setIsLoggedIn(!!token)
+    }
+    
+    checkAuth()
+    
+    // Listen for auth changes
+    window.addEventListener('storage', checkAuth)
     
     // Fetch comments
     fetchComments()
+    
+    return () => {
+      window.removeEventListener('storage', checkAuth)
+    }
   }, [scamId])
 
   const fetchComments = async () => {
@@ -51,7 +62,7 @@ export default function CommentSection({ scamId, initialComments = [], commentCo
     e.preventDefault()
     
     if (!isLoggedIn) {
-      router.push('/login')
+      router.push(`/login?returnUrl=/golpe/${scamId}`)
       return
     }
 
@@ -76,6 +87,14 @@ export default function CommentSection({ scamId, initialComments = [], commentCo
         const comment = await response.json()
         setComments([comment, ...comments])
         setNewComment('')
+      } else if (response.status === 401) {
+        // Token expirado ou inválido
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        setIsLoggedIn(false)
+        router.push(`/login?returnUrl=/golpe/${scamId}`)
+      } else {
+        console.error('Erro ao postar comentário')
       }
     } catch (error) {
       console.error('Failed to post comment:', error)
@@ -131,7 +150,7 @@ export default function CommentSection({ scamId, initialComments = [], commentCo
           ) : (
             <button
               type="button"
-              onClick={() => router.push('/login')}
+              onClick={() => router.push(`/login?returnUrl=/golpe/${scamId}`)}
               className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors font-medium"
             >
               Fazer login para comentar

@@ -52,6 +52,14 @@ export class UsersController {
     );
   }
 
+  @Get(':id/stats')
+  async getUserStats(@Param('id') id: string, @CurrentUser() user: any) {
+    if (user.id !== id && !user.isAdmin) {
+      throw new ForbiddenException('Sem permissão para ver estas estatísticas');
+    }
+    return this.usersService.getUserStats(id);
+  }
+
   @Patch('profile')
   async updateProfile(
     @CurrentUser() user: any,

@@ -1,22 +1,20 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/EmersonGarrido/reclama-golpe/refs/heads/main/assets/logo.png" alt="Reclama Golpe Logo" width="600" />
-  
-  # 🚨 Reclama Golpe
+  <h1>🚨 Reclama Golpe</h1>
   
   **Plataforma colaborativa de denúncia e conscientização sobre golpes online**
   
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-  [![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
+  [![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
   [![NestJS](https://img.shields.io/badge/NestJS-10-red)](https://nestjs.com/)
   [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
   
-  [Demo](https://reclamagolpe.com.br) • [Documentação](./docs) • [Reportar Bug](https://github.com/emersongarrido/reclama-golpe/issues) • [Solicitar Feature](https://github.com/emersongarrido/reclama-golpe/issues)
+  [Demo](https://reclamagolpe.com.br) • [Instagram](https://www.instagram.com/oemersongarrido) • [Reportar Bug](https://github.com/EmersonGarrido/reclama-golpe/issues)
 </div>
 
 ## 📋 Sobre o Projeto
 
-**Reclama Golpe** é uma plataforma open-source inspirada no modelo do Reclame Aqui, focada especificamente em combater golpes e fraudes online através do poder da comunidade. Nossa missão é criar um espaço seguro onde vítimas possam compartilhar suas experiências, alertar outros usuários e juntos construirmos uma base de dados pública sobre golpes na internet.
+**Reclama Golpe** é uma plataforma open-source e sem fins lucrativos, desenvolvida por **[Emerson Garrido](https://www.instagram.com/oemersongarrido)**, focada em combater golpes e fraudes online através do poder da comunidade. Nossa missão é criar um espaço seguro onde vítimas possam compartilhar suas experiências, alertar outros usuários e juntos construirmos uma base de dados pública sobre golpes na internet.
 
 ### 🎯 Principais Objetivos
 
@@ -25,23 +23,77 @@
 - **Educar** a população sobre táticas comuns de golpistas
 - **Conectar** vítimas para ações coletivas e suporte mútuo
 
-## ✨ Funcionalidades
+## ✨ Funcionalidades Implementadas
 
-### Para Usuários
+### 👤 Sistema de Usuários
+- ✅ **Cadastro e Login** - Autenticação JWT segura
+- ✅ **Perfil Personalizado** - Avatar, bio e informações do usuário
+- ✅ **Dashboard Pessoal** - Estatísticas de denúncias, comentários e curtidas
+- ✅ **Gerenciamento de Conta** - Edição de perfil, mudança de senha, exclusão de conta
+- ✅ **Autenticação Social** - Login com Google (em breve)
 
-- 📝 **Denúncias Detalhadas** - Relate golpes com evidências (prints, links, documentos)
-- 🔍 **Busca Inteligente** - Pesquise por empresa, tipo de golpe, CPF/CNPJ suspeito
-- 💬 **Comunidade Ativa** - Comente, valide e compartilhe denúncias
-- 📊 **Dashboard Pessoal** - Acompanhe suas denúncias e interações
-- 🔔 **Alertas em Tempo Real** - Notificações sobre novos golpes relevantes
-- 🛡️ **Denúncia Anônima** - Opção de reportar sem expor sua identidade
+### 📝 Sistema de Denúncias
+- ✅ **Criação de Denúncias** - Formulário completo com validação
+- ✅ **Categorização** - 10+ categorias de golpes (Phishing, E-commerce Falso, Pirâmide, etc.)
+- ✅ **Upload de Evidências** - Suporte para imagens e documentos
+- ✅ **Informações do Golpista** - Nome, site, telefone, email
+- ✅ **Valor do Prejuízo** - Documentação de perdas financeiras
+- ✅ **Status de Resolução** - Marcar golpes como resolvidos com detalhes
 
-### Para a Comunidade
+### 💬 Interação Social
+- ✅ **Sistema de Comentários** - Discussão em cada denúncia
+- ✅ **Curtidas** - Validação comunitária de denúncias
+- ✅ **Sistema de Reports** - Denunciar conteúdo inadequado
+- ✅ **Compartilhamento** - Botões para redes sociais
 
-- 📈 **Estatísticas Públicas** - Dados abertos sobre golpes mais comuns
-- 🏆 **Sistema de Reputação** - Reconhecimento para contribuidores ativos
-- 📚 **Central de Conhecimento** - Guias de prevenção e identificação de fraudes
-- 🤝 **Integração com Órgãos** - Conexão com Procon, Polícia Civil e outros
+### 🔍 Busca e Filtros
+- ✅ **Busca Global** - Por título, descrição, golpista
+- ✅ **Filtros por Categoria** - Navegação por tipo de golpe
+- ✅ **Ordenação** - Por data, popularidade, comentários
+- ✅ **Trending** - Golpes mais denunciados e em alta
+
+### 👨‍💼 Painel Administrativo
+- ✅ **Dashboard Admin** - Estatísticas gerais do sistema
+- ✅ **Moderação de Conteúdo** - Aprovar/rejeitar denúncias pendentes
+- ✅ **Gerenciamento de Denúncias** - Editar status, excluir, destacar
+- ✅ **Sistema de Reports** - Revisar denúncias de usuários
+- ✅ **Gerenciamento de Usuários** - Banir, promover, editar
+- ✅ **Logs de Atividade** - Auditoria de ações administrativas
+
+### 📊 Páginas e Recursos
+- ✅ **Home Page** - Feed de denúncias recentes e em destaque
+- ✅ **Página de Golpes** - Lista completa com filtros
+- ✅ **Detalhes do Golpe** - Visualização completa com evidências
+- ✅ **Trending Page** - Golpes mais populares
+- ✅ **Página Sobre** - Informações do projeto e desenvolvedor
+- ✅ **Dicas de Segurança** - Guias educativos
+- ✅ **Termos de Uso** - Políticas da plataforma
+- ✅ **Política de Privacidade** - LGPD compliance
+
+### 🛡️ Segurança e Moderação
+- ✅ **Moderação Prévia** - Denúncias pendentes de aprovação
+- ✅ **Proteção de Dados** - Criptografia de senhas com bcrypt
+- ✅ **Rate Limiting** - Proteção contra spam
+- ✅ **Validação de Dados** - DTOs com class-validator
+- ✅ **CORS Configurado** - Segurança de API
+
+### 🎨 Interface e UX
+- ✅ **Design Responsivo** - Mobile-first com Tailwind CSS
+- ✅ **Tema Claro** - Interface limpa e moderna
+- ✅ **Animações** - Framer Motion para transições suaves
+- ✅ **Loading States** - Skeletons e spinners
+- ✅ **Toasts** - Notificações de sucesso/erro
+- ✅ **Modais Interativos** - Para ações importantes
+
+### 🔧 Recursos Técnicos
+- ✅ **Monorepo com Turborepo** - Gerenciamento eficiente
+- ✅ **TypeScript** - Type safety em todo o projeto
+- ✅ **Prisma ORM** - Queries type-safe
+- ✅ **Next.js 15** - App Router e Server Components
+- ✅ **NestJS** - API RESTful robusta
+- ✅ **PostgreSQL** - Banco de dados relacional
+- ✅ **Docker Support** - Containerização
+- ✅ **Seeds de Dados** - Dados de exemplo para desenvolvimento
 
 ## 🚀 Começando
 
@@ -49,82 +101,74 @@
 
 - Node.js 20+
 - PostgreSQL 15+
-- Redis (opcional, para cache)
-- pnpm ou npm
+- pnpm, npm ou yarn
 
 ### Instalação
 
 1. **Clone o repositório**
-
 ```bash
-git clone https://github.com/emersongarrido/reclama-golpe.git
+git clone https://github.com/EmersonGarrido/reclama-golpe.git
 cd reclama-golpe
 ```
 
 2. **Instale as dependências**
-
 ```bash
-pnpm install
-# ou
 npm install
 ```
 
 3. **Configure as variáveis de ambiente**
 
-```bash
-cp .env.example .env.local
-# Edite o arquivo .env.local com suas configurações
+Frontend (.env.local):
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3333
+```
+
+Backend (.env):
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/reclama_golpe"
+JWT_SECRET="seu_secret_aqui"
+PORT=3333
 ```
 
 4. **Configure o banco de dados**
-
 ```bash
-pnpm db:migrate
-pnpm db:seed # Opcional: dados de exemplo
+cd apps/api
+npx prisma migrate dev
+npx prisma db seed
 ```
 
-5. **Inicie o projeto em modo desenvolvimento**
-
+5. **Inicie o projeto**
 ```bash
-pnpm dev
-# ou para iniciar serviços específicos:
-pnpm dev:web   # Frontend Next.js
-pnpm dev:api   # Backend NestJS
+# Na raiz do projeto
+npm run dev
+
+# Ou individualmente:
+npm run dev:web   # Frontend em http://localhost:3000
+npm run dev:api   # Backend em http://localhost:3333
 ```
-
-6. **Acesse a aplicação**
-
-- Frontend: http://localhost:3000
-- API: http://localhost:3001
-- Documentação API: http://localhost:3001/swagger
 
 ## 🏗️ Arquitetura
 
 ### Stack Tecnológica
 
 #### Frontend
-
-- **Framework:** Next.js 14 com App Router
-- **UI:** shadcn/ui + Tailwind CSS
-- **Estado:** Zustand + TanStack Query
-- **Formulários:** React Hook Form + Zod
-- **Real-time:** Socket.io Client
+- **Framework:** Next.js 15 com App Router
+- **Estilização:** Tailwind CSS
+- **Animações:** Framer Motion
+- **Formulários:** React Hook Form
+- **Validação:** Yup
+- **HTTP Client:** Fetch API
 
 #### Backend
-
-- **Framework:** NestJS com TypeScript
+- **Framework:** NestJS 10
 - **ORM:** Prisma
 - **Autenticação:** JWT + Passport
-- **Real-time:** Socket.io
-- **Cache:** Redis
-- **Fila:** Bull
+- **Validação:** class-validator
+- **Documentação:** Swagger
 
-#### Infraestrutura
-
-- **Database:** PostgreSQL
-- **Storage:** AWS S3 / Cloudflare R2
-- **Deploy:** Vercel (Frontend) + Railway/Render (Backend)
-- **Monorepo:** Turborepo
+#### Banco de Dados
+- **PostgreSQL** - Dados principais
+- **Prisma** - Migrations e queries
 
 ### Estrutura do Projeto
 
@@ -132,109 +176,49 @@ pnpm dev:api   # Backend NestJS
 reclama-golpe/
 ├── apps/
 │   ├── web/                    # Frontend Next.js
-│   │   ├── app/                # App Router
-│   │   │   ├── (public)/       # Páginas públicas
-│   │   │   ├── (auth)/         # Área autenticada
-│   │   │   └── admin/          # Painel administrativo
-│   │   └── components/         # Componentes React
-│   └── api/                    # Backend NestJS
-│       └── src/
-│           ├── modules/        # Módulos da aplicação
-│           └── shared/         # Código compartilhado
-├── packages/
-│   ├── database/              # Schemas Prisma
-│   ├── ui/                    # Componentes compartilhados
-│   └── types/                 # TypeScript types
-└── docs/                      # Documentação
+│   │   ├── src/
+│   │   │   ├── app/            # App Router pages
+│   │   │   ├── components/     # Componentes React
+│   │   │   ├── lib/           # Utilities
+│   │   │   └── types/         # TypeScript types
+│   │   └── public/            # Assets estáticos
+│   └── api/                   # Backend NestJS
+│       ├── src/
+│       │   ├── auth/          # Autenticação
+│       │   ├── users/         # Módulo de usuários
+│       │   ├── scams/         # Módulo de denúncias
+│       │   ├── comments/      # Módulo de comentários
+│       │   ├── admin/         # Módulo administrativo
+│       │   └── prisma/        # Database service
+│       └── prisma/
+│           ├── schema.prisma  # Schema do banco
+│           └── seed.ts        # Seeds de desenvolvimento
+├── turbo.json                 # Configuração Turborepo
+└── package.json              # Dependências raiz
 ```
+
+## 👨‍💻 Desenvolvedor
+
+<div align="center">
+  <img src="https://github.com/EmersonGarrido.png" width="100" height="100" style="border-radius: 50%;" alt="Emerson Garrido"/>
+  
+  **Emerson Garrido**
+  
+  [![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/oemersongarrido)
+  [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/EmersonGarrido)
+  
+  Este é um projeto **open source** e **sem fins lucrativos**, desenvolvido para ajudar a comunidade brasileira a se proteger contra golpes online.
+</div>
 
 ## 🤝 Como Contribuir
 
-Adoramos contribuições da comunidade! Este é um projeto open-source e toda ajuda é bem-vinda.
+Adoramos contribuições da comunidade! Este projeto é open-source e toda ajuda é bem-vinda.
 
-### Formas de Contribuir
-
-1. **🐛 Reportando Bugs**
-   - Use as [Issues](https://github.com/emersongarrido/reclama-golpe/issues) do GitHub
-   - Inclua prints, logs e passos para reproduzir
-
-2. **💡 Sugerindo Features**
-   - Abra uma [Issue](https://github.com/emersongarrido/reclama-golpe/issues) com tag "enhancement"
-   - Descreva o problema que a feature resolve
-
-3. **🔧 Enviando Pull Requests**
-   - Fork o projeto
-   - Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-   - Commit suas mudanças (`git commit -m 'Add: nova funcionalidade'`)
-   - Push para a branch (`git push origin feature/AmazingFeature`)
-   - Abra um Pull Request
-
-4. **📝 Melhorando Documentação**
-   - Corrija typos, adicione exemplos, melhore explicações
-
-5. **🎨 Design e UX**
-   - Proponha melhorias de interface
-   - Crie mockups e protótipos
-
-### Guidelines de Contribuição
-
-- Siga o padrão de código existente
-- Escreva testes para novas funcionalidades
-- Atualize a documentação quando necessário
-- Mantenha os commits semânticos e descritivos
-- Seja respeitoso e construtivo nas discussões
-
-## 📚 Documentação
-
-- [Guia de Instalação Detalhado](./docs/installation.md)
-- [Arquitetura Técnica](./arquitetura.md)
-- [API Reference](./docs/api.md)
-- [Guia de Contribuição](./CONTRIBUTING.md)
-- [Código de Conduta](./CODE_OF_CONDUCT.md)
-
-## 🗺️ Roadmap
-
-### Fase 1 - MVP (Em desenvolvimento)
-
-- [x] Setup inicial do monorepo
-- [x] Autenticação e autorização
-- [x] CRUD de denúncias
-- [x] Sistema de comentários
-- [x] Busca básica
-- [x] Upload de evidências
-- [x] Páginas de categorias de golpes
-- [x] Página de detalhes do golpe
-- [x] Página de denúncia
-- [x] Página de verificação
-- [x] Sistema de trending (golpes em alta)
-- [x] Páginas institucionais (sobre, termos, privacidade)
-- [x] Página de dicas de segurança
-
-### Fase 2 - Expansão
-
-- [ ] Sistema de categorização avançado
-- [ ] Dashboard com estatísticas
-- [ ] Moderação com IA
-- [ ] App mobile (React Native)
-- [ ] API pública
-
-### Fase 3 - Maturidade
-
-- [ ] Integração com órgãos oficiais
-- [ ] Sistema de verificação automatizada
-- [ ] Machine Learning para detecção de padrões
-- [ ] Expansão internacional
-
-## 🛡️ Segurança
-
-A segurança dos nossos usuários é prioridade máxima.
-
-- **Dados pessoais** protegidos conforme LGPD
-- **Denúncias anônimas** com criptografia end-to-end
-- **Moderação** manual e automatizada contra abusos
-- **Backup** regular e criptografado
-
-Encontrou uma vulnerabilidade? Por favor, reporte em privado para: security@reclamagolpe.com.br
+1. **Fork** o projeto
+2. Crie uma **branch** para sua feature (`git checkout -b feature/NovaFuncionalidade`)
+3. **Commit** suas mudanças (`git commit -m 'Add: nova funcionalidade'`)
+4. **Push** para a branch (`git push origin feature/NovaFuncionalidade`)
+5. Abra um **Pull Request**
 
 ## 📜 Licença
 
@@ -242,22 +226,19 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ## 🙏 Agradecimentos
 
-- Comunidade open-source por todas as ferramentas incríveis
-- Contribuidores que dedicam seu tempo ao projeto
+- Comunidade open-source pelas ferramentas incríveis
+- Todos que contribuírem com o projeto
 - Vítimas corajosas que compartilham suas experiências
-- Órgãos de defesa do consumidor pelo apoio
-
-## 📬 Contato
-
-**Emerson Garrido** - [@emersongarrido](https://github.com/emersongarrido)
-
-Link do Projeto: [https://github.com/emersongarrido/reclama-golpe](https://github.com/emersongarrido/reclama-golpe)
+- Você, por ajudar a tornar a internet um lugar mais seguro
 
 ---
 
 <div align="center">
-  <p>Feito com ❤️ pela comunidade brasileira contra golpes online</p>
+  <p>Desenvolvido com ❤️ por <a href="https://www.instagram.com/oemersongarrido">Emerson Garrido</a></p>
   <p>
-    <a href="https://github.com/emersongarrido/reclama-golpe/stargazers">⭐ Dê uma estrela se este projeto te ajudou!</a>
+    <strong>Projeto sem fins lucrativos para proteger os brasileiros de golpes online</strong>
+  </p>
+  <p>
+    <a href="https://github.com/EmersonGarrido/reclama-golpe">⭐ Dê uma estrela se este projeto te ajudou!</a>
   </p>
 </div>

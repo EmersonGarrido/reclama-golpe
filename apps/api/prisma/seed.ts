@@ -205,51 +205,135 @@ async function main() {
 
   console.log('🧹 Banco de dados limpo');
 
-  // Criar categorias
-  const categories = await Promise.all([
-    prisma.category.create({
-      data: {
-        slug: 'phishing',
-        name: 'Phishing',
-        description: 'Sites e emails falsos que tentam roubar suas informações pessoais',
-        icon: '🎣',
-        tips: [
-          'Sempre verifique o endereço do site',
-          'Desconfie de emails com erros de português',
-          'Bancos nunca pedem senha por email'
-        ],
-        riskLevel: 'HIGH'
-      }
-    }),
-    prisma.category.create({
-      data: {
-        slug: 'fake-ecommerce',
-        name: 'E-commerce Falso',
-        description: 'Lojas online fraudulentas que não entregam produtos',
-        icon: '🛒',
-        tips: [
-          'Pesquise a reputação da loja',
-          'Desconfie de preços muito baixos',
-          'Prefira pagamento na entrega quando possível'
-        ],
-        riskLevel: 'HIGH'
-      }
-    }),
-    prisma.category.create({
-      data: {
-        slug: 'pyramid',
-        name: 'Pirâmide Financeira',
-        description: 'Esquemas que prometem lucros irreais',
-        icon: '📊',
-        tips: [
-          'Desconfie de promessas de lucro fácil',
-          'Investimentos sérios não garantem retornos altos',
-          'Consulte a CVM sobre investimentos'
-        ],
-        riskLevel: 'CRITICAL'
-      }
-    })
-  ]);
+  // Criar todas as categorias baseadas no enum
+  const categoriesData = [
+    {
+      slug: 'PHISHING',
+      name: 'Phishing',
+      description: 'Sites e emails falsos que tentam roubar suas informações pessoais',
+      icon: '🎣',
+      tips: [
+        'Sempre verifique o endereço do site',
+        'Desconfie de emails com erros de português',
+        'Bancos nunca pedem senha por email'
+      ],
+      riskLevel: 'HIGH'
+    },
+    {
+      slug: 'PYRAMID_SCHEME',
+      name: 'Pirâmide Financeira',
+      description: 'Esquemas que prometem lucros irreais',
+      icon: '📊',
+      tips: [
+        'Desconfie de promessas de lucro fácil',
+        'Investimentos sérios não garantem retornos altos',
+        'Consulte a CVM sobre investimentos'
+      ],
+      riskLevel: 'CRITICAL'
+    },
+    {
+      slug: 'FAKE_ECOMMERCE',
+      name: 'E-commerce Falso',
+      description: 'Lojas online fraudulentas que não entregam produtos',
+      icon: '🛒',
+      tips: [
+        'Pesquise a reputação da loja',
+        'Desconfie de preços muito baixos',
+        'Prefira pagamento na entrega quando possível'
+      ],
+      riskLevel: 'HIGH'
+    },
+    {
+      slug: 'INVESTMENT_FRAUD',
+      name: 'Fraude de Investimento',
+      description: 'Golpes envolvendo falsos investimentos e promessas de lucro garantido',
+      icon: '💰',
+      tips: [
+        'Verifique se a empresa está registrada na CVM',
+        'Desconfie de lucros garantidos',
+        'Pesquise sobre a empresa antes de investir'
+      ],
+      riskLevel: 'CRITICAL'
+    },
+    {
+      slug: 'ROMANCE_SCAM',
+      name: 'Golpe do Amor',
+      description: 'Criminosos que fingem interesse romântico para extorquir dinheiro',
+      icon: '💔',
+      tips: [
+        'Nunca envie dinheiro para quem nunca conheceu pessoalmente',
+        'Desconfie de histórias tristes e urgentes',
+        'Verifique a identidade da pessoa por videochamada'
+      ],
+      riskLevel: 'HIGH'
+    },
+    {
+      slug: 'JOB_SCAM',
+      name: 'Golpe do Emprego',
+      description: 'Falsas ofertas de emprego que cobram taxas ou dados pessoais',
+      icon: '💼',
+      tips: [
+        'Empresas sérias não cobram para contratar',
+        'Verifique se a empresa existe',
+        'Desconfie de salários muito altos para pouco trabalho'
+      ],
+      riskLevel: 'MEDIUM'
+    },
+    {
+      slug: 'LOTTERY_SCAM',
+      name: 'Golpe da Loteria',
+      description: 'Falsos prêmios de loteria que exigem pagamento de taxas',
+      icon: '🎰',
+      tips: [
+        'Você não pode ganhar uma loteria que não jogou',
+        'Prêmios legítimos não exigem pagamento antecipado',
+        'Verifique com a loteria oficial'
+      ],
+      riskLevel: 'MEDIUM'
+    },
+    {
+      slug: 'TECH_SUPPORT',
+      name: 'Suporte Técnico Falso',
+      description: 'Golpistas se passando por suporte técnico de empresas conhecidas',
+      icon: '💻',
+      tips: [
+        'Microsoft, Apple etc nunca ligam para você',
+        'Não dê acesso remoto ao seu computador',
+        'Verifique o número oficial da empresa'
+      ],
+      riskLevel: 'HIGH'
+    },
+    {
+      slug: 'CRYPTOCURRENCY',
+      name: 'Golpe de Criptomoedas',
+      description: 'Fraudes envolvendo Bitcoin e outras criptomoedas',
+      icon: '₿',
+      tips: [
+        'Use apenas exchanges confiáveis',
+        'Desconfie de promessas de multiplicação',
+        'Nunca compartilhe suas chaves privadas'
+      ],
+      riskLevel: 'CRITICAL'
+    },
+    {
+      slug: 'OTHER',
+      name: 'Outros',
+      description: 'Outros tipos de golpes e fraudes',
+      icon: '⚠️',
+      tips: [
+        'Sempre pesquise antes de fazer negócios',
+        'Desconfie de urgências',
+        'Consulte órgãos de defesa do consumidor'
+      ],
+      riskLevel: 'MEDIUM'
+    }
+  ];
+
+  const categories = await Promise.all(
+    categoriesData.map(cat => 
+      prisma.category.create({ data: cat })
+    )
+  );
 
   console.log('✅ Categorias criadas');
 

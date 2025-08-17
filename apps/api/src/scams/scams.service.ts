@@ -16,6 +16,7 @@ export class ScamsService {
       data: {
         ...createScamDto,
         userId,
+        status: 'PENDING', // Toda denúncia começa como pendente para moderação
       },
       include: {
         user: {
@@ -37,13 +38,21 @@ export class ScamsService {
     // Emitir evento via WebSocket
     this.websocket.emitNewScam(scam);
 
-    return scam;
+    return {
+      ...scam,
+      message: 'Denúncia enviada para análise. Será publicada após aprovação da moderação.'
+    };
   }
 
-  async findAll(filters: FilterScamsDto, page = 1, limit = 20) {
+  async findAll(filters: FilterScamsDto, page = 1, limit = 20, isAdmin = false) {
     const skip = (page - 1) * limit;
     
     const where: Prisma.ScamWhereInput = {};
+    
+    // Se não for admin, só mostra denúncias aprovadas (VERIFIED)
+    if (!isAdmin && !filters.status) {
+      where.status = 'VERIFIED';
+    }
     
     if (filters.category) {
       where.category = filters.category;

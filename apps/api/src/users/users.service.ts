@@ -164,4 +164,31 @@ export class UsersService {
 
     return { message: 'Conta desativada com sucesso' };
   }
+
+  async getUserStats(userId: string) {
+    const [totalScams, resolvedScams, totalComments, scamsWithLikes] = await Promise.all([
+      this.prisma.scam.count({ where: { userId } }),
+      this.prisma.scam.count({ where: { userId, isResolved: true } }),
+      this.prisma.comment.count({ where: { userId } }),
+      this.prisma.scam.findMany({
+        where: { userId },
+        select: {
+          _count: {
+            select: {
+              likes: true
+            }
+          }
+        }
+      })
+    ]);
+
+    const totalLikes = scamsWithLikes.reduce((sum, scam) => sum + scam._count.likes, 0);
+
+    return {
+      totalScams,
+      resolvedScams,
+      totalComments,
+      totalLikes
+    };
+  }
 }

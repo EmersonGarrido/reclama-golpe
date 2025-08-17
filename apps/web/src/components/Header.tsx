@@ -12,13 +12,13 @@ export default function Header() {
       <nav className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="flex bg-red-500 items-center">
             <Image
               src="/logo.png"
               alt="Reclama Golpe"
-              width={180}
-              height={60}
-              className="h-10 w-auto"
+              width={200}
+              height={80}
+              className="h-[80px] w-[200px] "
             />
           </Link>
 

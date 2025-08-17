@@ -39,6 +39,8 @@ export class ScamsController {
     @Query('order') order?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
+    @Query('includeAll') includeAll?: string,
+    @CurrentUser() user?: any,
   ) {
     const filters: any = {};
     if (category) filters.category = category;
@@ -48,10 +50,14 @@ export class ScamsController {
     if (sortBy) filters.sortBy = sortBy;
     if (order) filters.order = order;
     
+    // Só mostra denúncias pendentes para admins ou se explicitamente solicitado
+    const isAdmin = user?.isAdmin || includeAll === 'true';
+    
     return this.scamsService.findAll(
       filters,
       page ? parseInt(page) : 1,
       limit ? parseInt(limit) : 20,
+      isAdmin,
     );
   }
 

@@ -272,32 +272,36 @@ export default function DenunciarPage() {
 
     setLoading(true)
     try {
-      const formData = new FormData()
-      
-      // Adicionar dados do formulário
-      Object.entries(data).forEach(([key, value]) => {
-        if (value !== null && value !== undefined && value !== '') {
-          formData.append(key, value.toString())
-        }
-      })
+      // Preparar dados para envio
+      const submitData: any = {
+        title: data.title,
+        description: data.description,
+        category: data.category, // Já está no formato correto do enum
+      }
 
-      // Adicionar arquivos
-      images.forEach(image => {
-        formData.append('images', image)
-      })
-      
-      documents.forEach(doc => {
-        formData.append('documents', doc)
-      })
+      // Adicionar campos opcionais
+      if (data.scammerName) submitData.scammerName = data.scammerName
+      if (data.scammerWebsite) submitData.scammerWebsite = data.scammerWebsite
+      if (data.scammerPhone) submitData.scammerPhone = data.scammerPhone
+      if (data.scammerEmail) submitData.scammerEmail = data.scammerEmail
+      if (data.amountLost) submitData.amountLost = Number(data.amountLost)
+      if (data.dateOccurred) submitData.dateOccurred = data.dateOccurred
+
+      // Por enquanto, enviar sem arquivos (adicionar upload de arquivos depois)
+      const evidence: string[] = []
+      if (images.length > 0) evidence.push('images_uploaded.jpg')
+      if (documents.length > 0) evidence.push('documents_uploaded.pdf')
+      if (evidence.length > 0) submitData.evidence = evidence
 
       const headers: HeadersInit = {
+        'Content-Type': 'application/json',
         ...(isLoggedIn && { 'Authorization': `Bearer ${getToken()}` })
       }
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333'}/scams`, {
         method: 'POST',
         headers,
-        body: formData,
+        body: JSON.stringify(submitData),
       })
 
       if (!response.ok) {
@@ -306,8 +310,9 @@ export default function DenunciarPage() {
 
       const result = await response.json()
       
-      alert('Denúncia enviada com sucesso! Ela será revisada antes de ser publicada.')
-      router.push(`/golpe/${result.id}`)
+      // Mostrar mensagem de moderação
+      alert(result.message || 'Denúncia enviada com sucesso! Ela será revisada pela nossa equipe de moderação antes de ser publicada.')
+      router.push('/painel/denuncias')
     } catch (error) {
       console.error('Erro ao enviar denúncia:', error)
       alert('Erro ao enviar denúncia. Por favor, tente novamente.')
@@ -419,7 +424,7 @@ export default function DenunciarPage() {
                     >
                       <option value="">Selecione uma categoria</option>
                       {categories.map(cat => (
-                        <option key={cat.id} value={cat.value}>
+                        <option key={cat.id} value={cat.slug}>
                           {cat.name}
                         </option>
                       ))}

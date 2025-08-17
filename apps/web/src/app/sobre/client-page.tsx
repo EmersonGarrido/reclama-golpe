@@ -458,6 +458,95 @@ export default function SobreClient() {
             </motion.div>
           </motion.section>
 
+          {/* Developer Section */}
+          <motion.section 
+            className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl shadow-lg p-8 border-2 border-purple-200"
+            variants={sectionVariants}
+          >
+            <motion.div 
+              className="flex items-center gap-4 mb-6"
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <motion.div
+                className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center"
+                whileHover={{ rotate: 5, scale: 1.1 }}
+              >
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+              </motion.div>
+              <h2 className="text-3xl font-bold text-gray-900">Sobre o Desenvolvedor</h2>
+            </motion.div>
+            <motion.div 
+              className="space-y-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              <div className="text-gray-700 leading-relaxed text-lg">
+                <p className="mb-4">
+                  Este projeto foi desenvolvido por <span className="font-bold text-purple-700">Emerson Garrido</span>, 
+                  com o objetivo de criar uma ferramenta gratuita e acessível para proteger a comunidade brasileira 
+                  contra golpes e fraudes online.
+                </p>
+                <p className="mb-6">
+                  O Reclama Golpe é um <span className="font-semibold">projeto sem fins lucrativos</span> e de 
+                  <span className="font-semibold"> código aberto</span>, disponível para toda a comunidade contribuir 
+                  e melhorar continuamente.
+                </p>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                <motion.a
+                  href="https://www.instagram.com/oemersongarrido"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all font-medium shadow-lg hover:shadow-xl"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12c0-3.403 2.759-6.162 6.162-6.162s6.162 2.759 6.162 6.162-2.759 6.162-6.162 6.162-6.162-2.759-6.162-6.162zm1.622 0c0 2.507 2.034 4.541 4.54 4.541s4.541-2.034 4.541-4.541-2.034-4.541-4.541-4.541-4.54 2.034-4.54 4.541zm10.901-4.337c0 .798-.644 1.442-1.442 1.442-.797 0-1.442-.644-1.442-1.442 0-.798.645-1.442 1.442-1.442.798 0 1.442.644 1.442 1.442z"/>
+                  </svg>
+                  <span>Seguir no Instagram</span>
+                </motion.a>
+                
+                <motion.a
+                  href="https://github.com/EmersonGarrido/reclama-golpe"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 bg-gray-800 text-white px-6 py-3 rounded-xl hover:bg-gray-900 transition-all font-medium shadow-lg hover:shadow-xl"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                  <span>Ver no GitHub</span>
+                </motion.a>
+              </div>
+              
+              <div className="mt-6 p-4 bg-white/60 rounded-lg text-center">
+                <p className="text-sm text-gray-600">
+                  <span className="font-medium">Nota:</span> Este é um projeto open source e sem fins lucrativos, 
+                  criado para ajudar a comunidade brasileira a se proteger contra golpes online.
+                </p>
+              </div>
+            </motion.div>
+          </motion.section>
+
           {/* CTA */}
           <motion.div 
             className="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-xl p-8 text-center"

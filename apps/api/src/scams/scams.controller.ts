@@ -28,6 +28,41 @@ export class ScamsController {
     return this.scamsService.create(createScamDto, user.id);
   }
 
+  @Get('admin')
+  @UseGuards(JwtAuthGuard)
+  async findAllAdmin(
+    @Query('category') category?: string,
+    @Query('status') status?: string,
+    @Query('search') search?: string,
+    @Query('userId') userId?: string,
+    @Query('sortBy') sortBy?: string,
+    @Query('order') order?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @CurrentUser() user?: any,
+  ) {
+    // Verificar se é admin
+    if (!user?.isAdmin) {
+      throw new Error('Acesso negado');
+    }
+
+    const filters: any = {};
+    if (category) filters.category = category;
+    if (status) filters.status = status;
+    if (search) filters.search = search;
+    if (userId) filters.userId = userId;
+    if (sortBy) filters.sortBy = sortBy;
+    if (order) filters.order = order;
+    
+    // Admin sempre vê todas as denúncias
+    return this.scamsService.findAll(
+      filters,
+      page ? parseInt(page) : 1,
+      limit ? parseInt(limit) : 20,
+      true, // isAdmin = true
+    );
+  }
+
   @Public()
   @Get()
   async findAll(

@@ -3,7 +3,7 @@ module.exports = {
     {
       // API Backend (NestJS)
       name: 'reclamagolpe-api',
-      script: 'dist/main.js',
+      script: 'dist/src/main.js',
       cwd: './apps/api',
       instances: 'max', // Use all CPU cores
       exec_mode: 'cluster',

@@ -115,22 +115,60 @@ install_nodejs() {
     
     # Verify Node.js installation
     node_version=$(node -v)
+    npm_version=$(npm -v)
     log_info "Node.js installed: ${node_version}"
+    log_info "NPM installed: ${npm_version}"
+    
+    # Get npm global prefix
+    NPM_PREFIX=$(npm config get prefix)
+    log_info "NPM prefix: ${NPM_PREFIX}"
     
     # Install Yarn Classic (1.x)
     log_info "Installing Yarn..."
-    npm install -g yarn@1.22.22
+    npm install -g yarn@1.22.22 --force
+    
+    # Add npm global bin to PATH
+    export PATH="$PATH:${NPM_PREFIX}/bin"
+    echo "export PATH=\"\$PATH:${NPM_PREFIX}/bin\"" >> /root/.bashrc
+    
+    # Create symlink for yarn if needed
+    if [ ! -f /usr/local/bin/yarn ]; then
+        if [ -f "${NPM_PREFIX}/lib/node_modules/yarn/bin/yarn.js" ]; then
+            ln -sf "${NPM_PREFIX}/lib/node_modules/yarn/bin/yarn.js" /usr/local/bin/yarn
+            chmod +x /usr/local/bin/yarn
+            log_info "Created yarn symlink"
+        elif [ -f "${NPM_PREFIX}/bin/yarn" ]; then
+            ln -sf "${NPM_PREFIX}/bin/yarn" /usr/local/bin/yarn
+            chmod +x /usr/local/bin/yarn
+            log_info "Created yarn symlink from bin"
+        fi
+    fi
+    
+    # Alternative: Install yarn using official script as fallback
+    if ! command -v yarn &> /dev/null; then
+        log_warning "Yarn not found, trying alternative installation..."
+        curl -o- -L https://yarnpkg.com/install.sh | bash
+        export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+        echo 'export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"' >> /root/.bashrc
+    fi
     
     # Disable Corepack to avoid conflicts
     if command -v corepack &> /dev/null; then
         corepack disable || true
     fi
     
-    # Verify Yarn installation
-    yarn_version=$(yarn -v)
-    log_info "Yarn installed: ${yarn_version}"
+    # Source bashrc to update PATH
+    source /root/.bashrc || true
     
-    log_success "Node.js and Yarn installed"
+    # Final verification
+    if command -v yarn &> /dev/null; then
+        yarn_version=$(yarn -v)
+        log_success "Yarn installed: ${yarn_version}"
+    else
+        log_warning "Yarn not found in PATH, will use npm as fallback"
+    fi
+    
+    log_success "Node.js and package manager installed"
 }
 
 # Install PM2
@@ -191,8 +229,17 @@ setup_project() {
     
     # Install dependencies
     log_info "Installing dependencies..."
-    # Use --ignore-engines to avoid version conflicts
-    yarn install --ignore-engines || npm install
+    # Try yarn first if available, otherwise use npm
+    if command -v yarn &> /dev/null; then
+        log_info "Using Yarn to install dependencies..."
+        yarn install --ignore-engines || {
+            log_warning "Yarn install failed, trying npm..."
+            npm install
+        }
+    else
+        log_info "Using NPM to install dependencies..."
+        npm install
+    fi
     
     # Create environment files
     create_env_files

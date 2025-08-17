@@ -11,39 +11,6 @@ interface HomeClientProps {
 }
 
 export default function HomeClient({ scamsData, trendingScams }: HomeClientProps) {
-  const [stats, setStats] = useState({
-    totalScams: 0,
-    totalUsers: 0,
-    totalComments: 0,
-    preventedLoss: 0,
-  })
-
-  useEffect(() => {
-    // Simplificado - apenas define os stats sem delay
-    setStats({
-      totalScams: 127,
-      totalUsers: 23,
-      totalComments: 184,
-      preventedLoss: 450000,
-    })
-  }, [])
-
-  const StatCard = ({ icon, value, label, color }: { 
-    icon: React.ReactNode; 
-    value: number | string; 
-    label: string; 
-    color: string;
-  }) => (
-    <div className="bg-white rounded-xl shadow-lg p-6 text-center hover:shadow-xl transition-shadow duration-200">
-      <div className={`w-16 h-16 mx-auto mb-4 ${color} rounded-xl flex items-center justify-center shadow-lg`}>
-        {icon}
-      </div>
-      <div className="text-3xl font-bold text-red-600 mb-2">
-        {value}
-      </div>
-      <div className="text-sm text-gray-600 font-medium">{label}</div>
-    </div>
-  )
 
   const TrendingCard = ({ scam, index }: { scam: Scam; index: number }) => (
     <div className="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition-shadow duration-200 border border-gray-200">
@@ -188,56 +155,6 @@ export default function HomeClient({ scamsData, trendingScams }: HomeClientProps
         </div>
       </section>
 
-      {/* Statistics Section - Simplificado */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">
-            Nossa Comunidade em Números
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <StatCard
-              icon={
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-              }
-              value={stats.totalScams}
-              label="Golpes Denunciados"
-              color="bg-gradient-to-r from-red-500 to-red-600"
-            />
-            <StatCard
-              icon={
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              }
-              value={stats.totalUsers}
-              label="Usuários Ativos"
-              color="bg-gradient-to-r from-blue-500 to-blue-600"
-            />
-            <StatCard
-              icon={
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-              }
-              value={stats.totalComments}
-              label="Comentários"
-              color="bg-gradient-to-r from-green-500 to-green-600"
-            />
-            <StatCard
-              icon={
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              }
-              value={`R$ ${stats.preventedLoss.toLocaleString('pt-BR')}`}
-              label="Prejuízos Evitados"
-              color="bg-gradient-to-r from-purple-500 to-purple-600"
-            />
-          </div>
-        </div>
-      </section>
 
       {/* Trending Section */}
       {trendingScams && trendingScams.length > 0 && (

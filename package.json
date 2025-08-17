@@ -2,6 +2,7 @@
   "name": "reclama-golpe",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "yarn@1.22.22",
   "description": "Plataforma colaborativa para denunciar e prevenir golpes online",
   "author": "Emerson Garrido <emerson@garrido.dev>",
   "license": "MIT",

@@ -11,7 +11,7 @@ import {
   IsEmail,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ScamCategory, ScamStatus } from '@prisma/client';
+import { ScamStatus } from '@prisma/client';
 
 export class CreateScamDto {
   @IsString()
@@ -23,8 +23,10 @@ export class CreateScamDto {
   @MinLength(50)
   description: string;
 
-  @IsEnum(ScamCategory)
-  category: ScamCategory;
+  @IsString()
+  @MinLength(2)
+  @MaxLength(50)
+  category: string; // slug da categoria do banco de dados
 
   @IsOptional()
   @IsString()
@@ -70,8 +72,10 @@ export class UpdateScamDto {
   description?: string;
 
   @IsOptional()
-  @IsEnum(ScamCategory)
-  category?: ScamCategory;
+  @IsString()
+  @MinLength(2)
+  @MaxLength(50)
+  category?: string; // slug da categoria do banco de dados
 
   @IsOptional()
   @IsEnum(ScamStatus)
@@ -110,8 +114,10 @@ export class UpdateScamDto {
 
 export class FilterScamsDto {
   @IsOptional()
-  @IsEnum(ScamCategory)
-  category?: ScamCategory;
+  @IsString()
+  @MinLength(2)
+  @MaxLength(50)
+  category?: string; // slug da categoria do banco de dados
 
   @IsOptional()
   @IsEnum(ScamStatus)

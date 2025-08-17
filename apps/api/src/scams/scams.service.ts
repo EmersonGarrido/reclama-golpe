@@ -12,9 +12,48 @@ export class ScamsService {
   ) {}
 
   async create(createScamDto: CreateScamDto, userId: string) {
+    // Buscar categoria pelo slug
+    const category = await this.prisma.category.findUnique({
+      where: { slug: createScamDto.category }
+    });
+
+    if (!category) {
+      throw new NotFoundException(`Categoria '${createScamDto.category}' não encontrada`);
+    }
+
+    // Mapear o slug da categoria para o enum antigo (temporariamente para compatibilidade)
+    const categoryEnumMap: any = {
+      'phishing': 'PHISHING',
+      'piramide-financeira': 'PYRAMID_SCHEME',
+      'ecommerce-falso': 'FAKE_ECOMMERCE',
+      'investimento': 'INVESTMENT_FRAUD',
+      'romance': 'ROMANCE_SCAM',
+      'emprego-falso': 'JOB_SCAM',
+      'loteria': 'LOTTERY_SCAM',
+      'suporte-tecnico': 'TECH_SUPPORT',
+      'criptomoedas': 'CRYPTOCURRENCY',
+      'whatsapp': 'OTHER',
+      'boleto-falso': 'OTHER',
+      'pix': 'OTHER',
+      'cartao-clonado': 'OTHER',
+      'emprestimo-falso': 'OTHER',
+      'falso-sequestro': 'OTHER',
+      'redes-sociais': 'OTHER',
+      'falsa-central': 'OTHER',
+      'nft-metaverso': 'OTHER',
+      'influencer-falso': 'OTHER',
+      'outros': 'OTHER'
+    };
+
+    const categoryEnum = categoryEnumMap[createScamDto.category] || 'OTHER';
+
+    const { category: _, ...scamData } = createScamDto;
+
     const scam = await this.prisma.scam.create({
       data: {
-        ...createScamDto,
+        ...scamData,
+        category: categoryEnum, // Enum antigo para compatibilidade
+        categoryId: category.id, // Relacionamento com a tabela de categorias
         userId,
         status: 'PENDING', // Toda denúncia começa como pendente para moderação
       },
@@ -26,6 +65,7 @@ export class ScamsService {
             avatar: true,
           },
         },
+        categoryRel: true,
         _count: {
           select: {
             comments: true,
@@ -55,7 +95,13 @@ export class ScamsService {
     }
     
     if (filters.category) {
-      where.category = filters.category;
+      // Buscar categoria pelo slug e filtrar pelo categoryId
+      const category = await this.prisma.category.findUnique({
+        where: { slug: filters.category }
+      });
+      if (category) {
+        where.categoryId = category.id;
+      }
     }
     
     if (filters.status) {
@@ -188,9 +234,43 @@ export class ScamsService {
       throw new ForbiddenException('Sem permissão para editar esta denúncia');
     }
 
+    // Se categoria foi passada, buscar o ID da categoria
+    let updateData: any = { ...updateScamDto };
+    
+    if (updateScamDto.category) {
+      const category = await this.prisma.category.findUnique({
+        where: { slug: updateScamDto.category }
+      });
+      
+      if (!category) {
+        throw new NotFoundException(`Categoria '${updateScamDto.category}' não encontrada`);
+      }
+      
+      // Mapear o slug para enum (compatibilidade)
+      const categoryEnumMap: any = {
+        'phishing': 'PHISHING',
+        'piramide-financeira': 'PYRAMID_SCHEME',
+        'ecommerce-falso': 'FAKE_ECOMMERCE',
+        'investimento': 'INVESTMENT_FRAUD',
+        'romance': 'ROMANCE_SCAM',
+        'emprego-falso': 'JOB_SCAM',
+        'loteria': 'LOTTERY_SCAM',
+        'suporte-tecnico': 'TECH_SUPPORT',
+        'criptomoedas': 'CRYPTOCURRENCY',
+        'outros': 'OTHER'
+      };
+      
+      const { category: _, ...restData } = updateScamDto;
+      updateData = {
+        ...restData,
+        category: categoryEnumMap[updateScamDto.category] || 'OTHER',
+        categoryId: category.id
+      };
+    }
+
     const updatedScam = await this.prisma.scam.update({
       where: { id },
-      data: updateScamDto,
+      data: updateData,
       include: {
         user: {
           select: {
@@ -199,6 +279,7 @@ export class ScamsService {
             avatar: true,
           },
         },
+        categoryRel: true,
         _count: {
           select: {
             comments: true,
@@ -303,6 +384,7 @@ export class ScamsService {
             avatar: true,
           },
         },
+        categoryRel: true,
         _count: {
           select: {
             comments: true,

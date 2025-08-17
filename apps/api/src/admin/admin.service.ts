@@ -136,6 +136,129 @@ export class AdminService {
     return reports;
   }
 
+  async getAllUsers() {
+    const users = await this.prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        bio: true,
+        avatar: true,
+        isAdmin: true,
+        createdAt: true,
+        _count: {
+          select: {
+            scams: true,
+            comments: true,
+            likes: true
+          }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    return users;
+  }
+
+  async toggleUserAdmin(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId }
+    });
+
+    if (!user) {
+      throw new Error('Usuário não encontrado');
+    }
+
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: { isAdmin: !user.isAdmin }
+    });
+  }
+
+  async deleteUser(userId: string) {
+    // Primeiro, deletar todas as relações do usuário
+    await this.prisma.$transaction([
+      // Deletar likes
+      this.prisma.like.deleteMany({
+        where: { userId }
+      }),
+      // Deletar reports
+      this.prisma.report.deleteMany({
+        where: { userId }
+      }),
+      // Deletar comentários
+      this.prisma.comment.deleteMany({
+        where: { userId }
+      }),
+      // Deletar denúncias
+      this.prisma.scam.deleteMany({
+        where: { userId }
+      }),
+      // Por fim, deletar o usuário
+      this.prisma.user.delete({
+        where: { id: userId }
+      })
+    ]);
+
+    return { message: 'Usuário excluído com sucesso' };
+  }
+
+  async getAllCategories() {
+    const categories = await this.prisma.category.findMany({
+      include: {
+        _count: {
+          select: {
+            scams: true
+          }
+        }
+      },
+      orderBy: { name: 'asc' }
+    });
+
+    return categories;
+  }
+
+  async createCategory(data: { name: string; slug: string; description?: string }) {
+    // Verificar se já existe categoria com o mesmo slug
+    const existing = await this.prisma.category.findUnique({
+      where: { slug: data.slug }
+    });
+
+    if (existing) {
+      throw new Error('Já existe uma categoria com este identificador');
+    }
+
+    return this.prisma.category.create({
+      data: {
+        name: data.name,
+        slug: data.slug,
+        description: data.description || ''
+      }
+    });
+  }
+
+  async updateCategory(categoryId: string, data: { name?: string; description?: string }) {
+    return this.prisma.category.update({
+      where: { id: categoryId },
+      data
+    });
+  }
+
+  async deleteCategory(categoryId: string) {
+    // Verificar se existem denúncias usando esta categoria
+    const scamsCount = await this.prisma.scam.count({
+      where: { categoryId }
+    });
+
+    if (scamsCount > 0) {
+      throw new Error(`Não é possível excluir. Existem ${scamsCount} denúncias usando esta categoria.`);
+    }
+
+    return this.prisma.category.delete({
+      where: { id: categoryId }
+    });
+  }
+
   private formatTimeAgo(date: Date): string {
     const now = new Date();
     const diff = now.getTime() - date.getTime();

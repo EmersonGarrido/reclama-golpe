@@ -31,7 +31,7 @@ export default function BuildInfo({ detailed = false, className = '' }: BuildInf
     fetch('/build-info.json')
       .then(res => res.json())
       .then(data => {
-        setBuildInfo(prev => ({ ...prev, ...data }))
+        setBuildInfo((prev: any) => ({ ...prev, ...data }))
       })
       .catch(() => {
         // Use default build info if file doesn't exist

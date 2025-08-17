@@ -1,0 +1,198 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  password  String
+  avatar    String?
+  bio       String?
+  isAdmin   Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  scams     Scam[]
+  comments  Comment[]
+  likes     Like[]
+  reports   Report[]
+
+  @@map("users")
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  name        String
+  description String   @db.Text
+  icon        String?
+  tips        String[] // Array de dicas de segurança
+  riskLevel   String   @default("MEDIUM") // LOW, MEDIUM, HIGH, CRITICAL
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  scams       Scam[]
+
+  @@index([slug])
+  @@index([isActive])
+  @@map("categories")
+}
+
+model Scam {
+  id          String      @id @default(uuid())
+  title       String
+  description String      @db.Text
+  category    ScamCategory
+  status      ScamStatus  @default(PENDING)
+  
+  categoryId  String?
+  categoryRel Category?   @relation(fields: [categoryId], references: [id])
+  
+  scammerName    String?
+  scammerWebsite String?
+  scammerPhone   String?
+  scammerEmail   String?
+  
+  amountLost     Float?
+  dateOccurred   DateTime?
+  
+  evidence       String[]
+  views          Int         @default(0)
+  
+  // Resolution fields
+  isResolved     Boolean     @default(false)
+  resolvedAt     DateTime?
+  resolutionNote String?     @db.Text
+  resolutionLinks String[]   // Links de matérias, prints, etc
+  resolvedBy     String?     // ID do usuário que reportou a resolução
+  
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  
+  userId         String
+  user           User        @relation(fields: [userId], references: [id])
+  
+  comments       Comment[]
+  likes          Like[]
+  reports        Report[]
+
+  @@index([category])
+  @@index([status])
+  @@index([createdAt])
+  @@index([isResolved])
+  @@map("scams")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  
+  scamId    String
+  scam      Scam     @relation(fields: [scamId], references: [id], onDelete: Cascade)
+  
+  parentId  String?
+  parent    Comment? @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   Comment[] @relation("CommentReplies")
+
+  @@index([scamId])
+  @@map("comments")
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  
+  scamId    String
+  scam      Scam     @relation(fields: [scamId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, scamId])
+  @@index([scamId])
+  @@map("likes")
+}
+
+model Report {
+  id        String       @id @default(uuid())
+  reason    ReportReason
+  details   String?      @db.Text
+  status    ReportStatus @default(PENDING)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  
+  userId    String
+  user      User         @relation(fields: [userId], references: [id])
+  
+  scamId    String
+  scam      Scam         @relation(fields: [scamId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@map("reports")
+}
+
+enum ScamCategory {
+  PHISHING
+  PYRAMID_SCHEME
+  FAKE_ECOMMERCE
+  INVESTMENT_FRAUD
+  ROMANCE_SCAM
+  JOB_SCAM
+  LOTTERY_SCAM
+  TECH_SUPPORT
+  CRYPTOCURRENCY
+  OTHER
+}
+
+enum ScamStatus {
+  PENDING
+  VERIFIED
+  UNVERIFIED
+  RESOLVED
+}
+
+enum ReportReason {
+  FALSE_INFORMATION
+  SPAM
+  INAPPROPRIATE_CONTENT
+  DUPLICATE
+  OTHER
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWED
+  RESOLVED
+  DISMISSED
+}
+
+model TelegramSession {
+  id            String    @id @default(uuid())
+  phoneNumber   String    @unique
+  sessionString String    @db.Text
+  isActive      Boolean   @default(true)
+  apiId         String?
+  apiHash       String?
+  metadata      Json?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([isActive])
+  @@index([phoneNumber])
+  @@index([updatedAt])
+  @@map("telegram_sessions")
+}

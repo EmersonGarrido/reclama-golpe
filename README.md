@@ -198,10 +198,17 @@ Adoramos contribuições da comunidade! Este é um projeto open-source e toda aj
 
 - [x] Setup inicial do monorepo
 - [x] Autenticação e autorização
-- [ ] CRUD de denúncias
-- [ ] Sistema de comentários
-- [ ] Busca básica
-- [ ] Upload de evidências
+- [x] CRUD de denúncias
+- [x] Sistema de comentários
+- [x] Busca básica
+- [x] Upload de evidências
+- [x] Páginas de categorias de golpes
+- [x] Página de detalhes do golpe
+- [x] Página de denúncia
+- [x] Página de verificação
+- [x] Sistema de trending (golpes em alta)
+- [x] Páginas institucionais (sobre, termos, privacidade)
+- [x] Página de dicas de segurança
 
 ### Fase 2 - Expansão
 

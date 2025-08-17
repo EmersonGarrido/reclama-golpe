@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import BuildInfo from './BuildInfo'
 
 export default function Footer() {
   return (
@@ -139,12 +140,10 @@ export default function Footer() {
           </div>
           
           <div className="text-center mt-6 pt-4 border-t border-gray-800">
-            <p className="text-gray-500 text-xs">
+            <p className="text-gray-500 text-xs mb-2">
               Desenvolvido para proteger os brasileiros de golpes online
             </p>
-            <p className="text-gray-600 text-xs mt-2">
-              Versão 1.0.0 | Release Inicial
-            </p>
+            <BuildInfo detailed className="text-gray-600" />
           </div>
         </div>
       </div>

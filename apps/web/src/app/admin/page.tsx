@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { isAuthenticated, getUser } from '@/lib/auth'
+import SystemInfo from '@/components/admin/SystemInfo'
 
 interface SystemStats {
   totalUsers: number
@@ -276,29 +277,35 @@ export default function AdminDashboard() {
           </Link>
         </div>
 
-        {/* Atividade Recente */}
-        <div className="bg-white rounded-lg shadow-sm">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-xl font-bold text-gray-900">Atividade Recente</h2>
-          </div>
-          <div className="p-6">
-            {stats.recentActivity && stats.recentActivity.length > 0 ? (
-              <div className="space-y-4">
-                {stats.recentActivity.map((activity, index) => (
-                  <div key={index} className="flex items-start gap-4 pb-4 border-b border-gray-100 last:border-0">
-                    <div className="w-2 h-2 bg-red-600 rounded-full mt-2"></div>
-                    <div className="flex-1">
-                      <p className="text-gray-900">{activity.description}</p>
-                      <p className="text-sm text-gray-500 mt-1">{activity.time}</p>
+        {/* System Info and Activity */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* System Info */}
+          <SystemInfo />
+          
+          {/* Atividade Recente */}
+          <div className="bg-white rounded-lg shadow-sm">
+            <div className="p-6 border-b border-gray-200">
+              <h2 className="text-xl font-bold text-gray-900">Atividade Recente</h2>
+            </div>
+            <div className="p-6">
+              {stats.recentActivity && stats.recentActivity.length > 0 ? (
+                <div className="space-y-4">
+                  {stats.recentActivity.map((activity, index) => (
+                    <div key={index} className="flex items-start gap-4 pb-4 border-b border-gray-100 last:border-0">
+                      <div className="w-2 h-2 bg-red-600 rounded-full mt-2"></div>
+                      <div className="flex-1">
+                        <p className="text-gray-900">{activity.description}</p>
+                        <p className="text-sm text-gray-500 mt-1">{activity.time}</p>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-500 text-center py-8">
-                Nenhuma atividade recente
-              </p>
-            )}
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500 text-center py-8">
+                  Nenhuma atividade recente
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>

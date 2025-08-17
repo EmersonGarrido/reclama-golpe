@@ -5,10 +5,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack --port 3000",
+    "prebuild": "node scripts/generate-build-info.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint --max-warnings 0",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "build:info": "node scripts/generate-build-info.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",

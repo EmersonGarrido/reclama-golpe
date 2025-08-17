@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import HeaderAuth from '@/components/HeaderAuth'
 import Footer from '@/components/Footer'
+import { BuildInfoConsole } from '@/components/BuildInfo'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -77,6 +78,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${inter.className} min-h-screen flex flex-col`}>
+        <BuildInfoConsole />
         <HeaderAuth />
         <main className="flex-1">{children}</main>
         <Footer />

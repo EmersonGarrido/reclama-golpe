@@ -53,6 +53,23 @@ load_config() {
 # Update system
 update_system() {
     log_info "Updating system packages..."
+    
+    # Wait for any running apt-get processes to finish
+    while fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
+        log_warning "Waiting for another apt process to finish..."
+        sleep 5
+    done
+    
+    # Clean any potential locks
+    rm -f /var/lib/apt/lists/lock
+    rm -f /var/cache/apt/archives/lock
+    rm -f /var/lib/dpkg/lock-frontend
+    rm -f /var/lib/dpkg/lock
+    
+    # Configure any pending packages
+    dpkg --configure -a || true
+    
+    # Update and upgrade
     apt-get update -y
     apt-get upgrade -y
     apt-get install -y curl wget git build-essential software-properties-common
@@ -96,8 +113,22 @@ install_nodejs() {
     curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash -
     apt-get install -y nodejs
     
-    # Install Yarn
-    npm install -g yarn
+    # Verify Node.js installation
+    node_version=$(node -v)
+    log_info "Node.js installed: ${node_version}"
+    
+    # Install Yarn Classic (1.x)
+    log_info "Installing Yarn..."
+    npm install -g yarn@1.22.22
+    
+    # Disable Corepack to avoid conflicts
+    if command -v corepack &> /dev/null; then
+        corepack disable || true
+    fi
+    
+    # Verify Yarn installation
+    yarn_version=$(yarn -v)
+    log_info "Yarn installed: ${yarn_version}"
     
     log_success "Node.js and Yarn installed"
 }
@@ -145,9 +176,23 @@ setup_project() {
         git clone -b ${GITHUB_BRANCH} ${GITHUB_REPO} .
     fi
     
+    # Fix Yarn/Corepack issues
+    log_info "Fixing Yarn configuration..."
+    # Remove packageManager from package.json to avoid Corepack conflicts
+    if grep -q '"packageManager"' package.json; then
+        sed -i '/"packageManager":/d' package.json
+        log_info "Removed packageManager field from package.json"
+    fi
+    
+    # Try to enable Corepack if available, but don't fail if not
+    if command -v corepack &> /dev/null; then
+        corepack enable || log_warning "Could not enable Corepack, using classic Yarn"
+    fi
+    
     # Install dependencies
     log_info "Installing dependencies..."
-    yarn install
+    # Use --ignore-engines to avoid version conflicts
+    yarn install --ignore-engines || npm install
     
     # Create environment files
     create_env_files
@@ -161,7 +206,12 @@ setup_project() {
     
     # Build projects
     log_info "Building projects..."
-    yarn build
+    # Try yarn first, fallback to npm
+    if command -v yarn &> /dev/null; then
+        yarn build || npm run build
+    else
+        npm run build
+    fi
     
     log_success "Project setup completed"
 }

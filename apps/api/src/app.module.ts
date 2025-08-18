@@ -12,6 +12,7 @@ import { CommentsModule } from './comments/comments.module';
 import { AdminModule } from './admin/admin.module';
 import { WebsocketModule } from './websocket/websocket.module';
 import { UploadModule } from './upload/upload.module';
+import { SavedScamsModule } from './saved-scams/saved-scams.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
@@ -28,6 +29,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     AdminModule,
     WebsocketModule,
     UploadModule,
+    SavedScamsModule,
   ],
   controllers: [AppController],
   providers: [

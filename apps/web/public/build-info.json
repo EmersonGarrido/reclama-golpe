@@ -1,10 +1,10 @@
 {
   "version": "1.0.0",
-  "buildNumber": "20250818.1200",
+  "buildNumber": "20250818.1033",
   "buildDate": "18/08/2025",
-  "buildTime": "12:00:00",
-  "timestamp": "2025-08-18T15:00:00.000Z",
-  "environment": "production",
-  "gitHash": "production",
-  "gitBranch": "main"
+  "buildTime": "10:33:03",
+  "timestamp": "2025-08-18T13:33:03.537Z",
+  "environment": "development",
+  "gitHash": "969b48d76038eacdc86d2ba88ba2bbf3d2f5bfca",
+  "gitBranch": "hotfix/vercel-build-error"
 }

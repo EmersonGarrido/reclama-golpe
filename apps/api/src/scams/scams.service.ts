@@ -201,6 +201,10 @@ export class ScamsService {
           where: { userId },
           select: { id: true },
         } : false,
+        savedBy: userId ? {
+          where: { userId },
+          select: { id: true },
+        } : false,
         _count: {
           select: {
             comments: true,
@@ -224,6 +228,7 @@ export class ScamsService {
     return {
       ...scam,
       isLiked: userId && scam.likes ? scam.likes.length > 0 : false,
+      isSaved: userId && scam.savedBy ? scam.savedBy.length > 0 : false,
     };
   }
 

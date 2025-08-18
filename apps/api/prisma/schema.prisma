@@ -23,6 +23,7 @@ model User {
   comments  Comment[]
   likes     Like[]
   reports   Report[]
+  savedScams SavedScam[]
 
   @@map("users")
 }
@@ -84,6 +85,7 @@ model Scam {
   comments       Comment[]
   likes          Like[]
   reports        Report[]
+  savedBy        SavedScam[]
 
   @@index([category])
   @@index([status])
@@ -144,6 +146,22 @@ model Report {
 
   @@index([status])
   @@map("reports")
+}
+
+model SavedScam {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  
+  scamId    String
+  scam      Scam     @relation(fields: [scamId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, scamId])
+  @@index([userId])
+  @@index([scamId])
+  @@map("saved_scams")
 }
 
 enum ScamCategory {

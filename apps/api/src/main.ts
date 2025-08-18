@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as express from 'express';
 import { join } from 'path';
+import { securityConfig } from './config/security.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,9 +19,25 @@ async function bootstrap() {
     }),
   );
 
+  // CORS configuration based on environment
+  const isProduction = process.env.NODE_ENV === 'production';
+  const corsConfig = isProduction 
+    ? securityConfig.cors.production 
+    : securityConfig.cors.development;
+
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://reclamagolpe.com.br'],
-    credentials: true,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or Postman)
+      if (!origin) return callback(null, true);
+      
+      if (corsConfig.origins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.warn(`CORS blocked request from origin: ${origin}`);
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    ...securityConfig.cors.options,
   });
 
   const port = process.env.PORT || 3333;

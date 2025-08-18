@@ -152,13 +152,31 @@ Se você encontrar novas vulnerabilidades:
 
 - [ ] Trocar JWT_SECRET e usar gerador criptográfico
 - [ ] Remover credenciais do arquivo .env
-- [ ] Implementar rate limiting
+- [x] Implementar rate limiting ✅ (18/08/2025)
 - [ ] Migrar localStorage para cookies httpOnly
 - [ ] Adicionar Helmet
 - [ ] Remover console.log
-- [ ] Configurar CORS para produção
+- [x] Configurar CORS para produção ✅ (18/08/2025)
 - [ ] Implementar validação de uploads
 - [ ] Adicionar logs de auditoria
 - [ ] Configurar HTTPS obrigatório
 - [ ] Implementar 2FA para admins
 - [ ] Adicionar testes de segurança
+
+## Atualizações de Segurança Implementadas
+
+### 18/08/2025 - Rate Limiting e CORS
+
+#### Rate Limiting (@nestjs/throttler)
+- **Global**: 100 requisições por minuto
+- **Login**: 5 tentativas por minuto
+- **Registro**: 3 cadastros por minuto
+- **Criar Denúncia**: 10 denúncias por minuto
+- Configuração centralizada em `security.config.ts`
+
+#### CORS
+- Configuração dinâmica baseada em ambiente (NODE_ENV)
+- **Produção**: Apenas domínios reclamagolpe.com.br
+- **Desenvolvimento**: localhost:3000, localhost:3001
+- Headers e métodos permitidos configurados
+- Cache de preflight: 24 horas

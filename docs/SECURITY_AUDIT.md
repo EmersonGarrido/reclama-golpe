@@ -158,14 +158,14 @@ Se você encontrar novas vulnerabilidades:
 - [ ] Remover console.log
 - [x] Configurar CORS para produção ✅ (18/08/2025)
 - [ ] Implementar validação de uploads
-- [ ] Adicionar logs de auditoria
-- [ ] Configurar HTTPS obrigatório
+- [x] Adicionar logs de auditoria ✅ (18/08/2025)
+- [x] Configurar HTTPS obrigatório ✅ (18/08/2025)
 - [ ] Implementar 2FA para admins
 - [ ] Adicionar testes de segurança
 
 ## Atualizações de Segurança Implementadas
 
-### 18/08/2025 - Rate Limiting e CORS
+### 18/08/2025 - Rate Limiting, CORS, Logs de Auditoria e HTTPS
 
 #### Rate Limiting (@nestjs/throttler)
 - **Global**: 100 requisições por minuto
@@ -180,3 +180,28 @@ Se você encontrar novas vulnerabilidades:
 - **Desenvolvimento**: localhost:3000, localhost:3001
 - Headers e métodos permitidos configurados
 - Cache de preflight: 24 horas
+
+#### Logs de Auditoria (Winston)
+- Sistema completo de logging com Winston
+- Logs rotativos diários com compressão
+- Níveis de log: audit, error, combined
+- Auditoria de ações sensíveis:
+  - Login/Logout (sucesso e falha)
+  - Registro de usuários
+  - Operações CRUD em denúncias
+  - Ações administrativas
+  - Eventos de segurança
+- Interceptor para log de todas requisições HTTP
+- Sanitização de dados sensíveis (senhas)
+
+#### HTTPS Obrigatório
+- Redirecionamento automático HTTP → HTTPS em produção
+- Headers de segurança implementados:
+  - Strict-Transport-Security (HSTS)
+  - X-Content-Type-Options: nosniff
+  - X-Frame-Options: DENY
+  - X-XSS-Protection
+  - Content-Security-Policy
+  - Referrer-Policy
+- Trust proxy configurado para ambientes com reverse proxy
+- Middleware de segurança para todas requisições

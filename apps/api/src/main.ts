@@ -4,9 +4,18 @@ import { ValidationPipe } from '@nestjs/common';
 import * as express from 'express';
 import { join } from 'path';
 import { securityConfig } from './config/security.config';
+import { HttpsRedirectMiddleware } from './middleware/https-redirect.middleware';
+import { SecurityHeadersMiddleware } from './middleware/security-headers.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Apply security middlewares
+  app.use(new HttpsRedirectMiddleware().use.bind(new HttpsRedirectMiddleware()));
+  app.use(new SecurityHeadersMiddleware().use.bind(new SecurityHeadersMiddleware()));
+
+  // Trust proxy (important for HTTPS detection behind reverse proxy)
+  app.getHttpAdapter().getInstance().set('trust proxy', true);
 
   // Serve static files from uploads directory
   app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));

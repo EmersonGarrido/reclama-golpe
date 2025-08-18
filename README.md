@@ -210,15 +210,66 @@ reclama-golpe/
   Este é um projeto **open source** e **sem fins lucrativos**, desenvolvido para ajudar a comunidade brasileira a se proteger contra golpes online.
 </div>
 
+## 🔒 Segurança
+
+### Checklist de Correções de Segurança
+
+Estamos trabalhando ativamente para melhorar a segurança da plataforma. Veja o [Relatório de Auditoria de Segurança](docs/SECURITY_AUDIT.md) completo.
+
+#### ⚠️ Correções Urgentes (P0)
+- [ ] **Trocar JWT_SECRET** - Usar gerador criptográfico seguro
+- [ ] **Remover credenciais do .env** - Implementar gerenciador de secrets
+- [ ] **Implementar rate limiting** - Proteção contra força bruta
+- [ ] **Migrar tokens JWT** - De localStorage para cookies httpOnly
+
+#### 🚧 Melhorias de Segurança (P1)
+- [ ] **Adicionar Helmet** - Headers de segurança HTTP
+- [ ] **Remover console.log** - Implementar sistema de logs apropriado
+- [ ] **Configurar CORS** - Remover localhost em produção
+- [ ] **Validação de uploads** - Implementar verificação de tipos de arquivo
+- [ ] **Logs de auditoria** - Rastrear ações sensíveis
+- [ ] **HTTPS obrigatório** - Forçar conexões seguras
+
+#### 🎯 Recursos Futuros (P2)
+- [ ] **2FA para admins** - Autenticação de dois fatores
+- [ ] **Testes de segurança** - Implementar suite de testes
+- [ ] **Monitoramento** - Sistema de alertas de segurança
+- [ ] **Pentest** - Auditoria profissional
+
+### Como Reportar Vulnerabilidades
+
+Se você encontrar uma vulnerabilidade de segurança, por favor:
+1. **NÃO** crie uma issue pública
+2. Envie um email para: emerson@garrido.dev
+3. Inclua detalhes sobre a vulnerabilidade e como reproduzi-la
+4. Aguarde nossa resposta antes de divulgar publicamente
+
 ## 🤝 Como Contribuir
 
 Adoramos contribuições da comunidade! Este projeto é open-source e toda ajuda é bem-vinda.
+
+### Áreas que Precisam de Ajuda
+
+- 🔒 **Segurança** - Correção das vulnerabilidades listadas acima
+- 🧪 **Testes** - Implementação de testes unitários e E2E
+- 📱 **Mobile** - Melhorias na experiência mobile
+- 🌐 **Internacionalização** - Suporte para múltiplos idiomas
+- 📊 **Analytics** - Dashboard com estatísticas avançadas
+
+### Passos para Contribuir
 
 1. **Fork** o projeto
 2. Crie uma **branch** para sua feature (`git checkout -b feature/NovaFuncionalidade`)
 3. **Commit** suas mudanças (`git commit -m 'Add: nova funcionalidade'`)
 4. **Push** para a branch (`git push origin feature/NovaFuncionalidade`)
 5. Abra um **Pull Request**
+
+### Diretrizes de Contribuição
+
+- Siga as convenções de código existentes
+- Adicione testes para novas funcionalidades
+- Atualize a documentação quando necessário
+- Verifique o checklist de segurança antes de submeter
 
 ## 📜 Licença
 

@@ -27,14 +27,40 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
 
   async handleConnection(client: Socket) {
     try {
-      const token = client.handshake.auth.token;
-      if (token) {
-        const payload = this.jwtService.verify(token);
-        this.connectedUsers.set(client.id, payload.sub);
-        client.join(`user-${payload.sub}`);
-        console.log(`User ${payload.sub} connected`);
+      // Token é OBRIGATÓRIO
+      const token = client.handshake.auth.token || client.handshake.headers.authorization?.replace('Bearer ', '');
+      
+      if (!token) {
+        console.log('WebSocket connection rejected: No token provided');
+        client.emit('error', { message: 'Authentication required' });
+        client.disconnect();
+        return;
       }
+
+      // Verificar e validar o token
+      const payload = this.jwtService.verify(token);
+      
+      if (!payload || !payload.sub) {
+        console.log('WebSocket connection rejected: Invalid token payload');
+        client.emit('error', { message: 'Invalid authentication' });
+        client.disconnect();
+        return;
+      }
+
+      // Armazenar informações do usuário autenticado
+      this.connectedUsers.set(client.id, payload.sub);
+      client.data.userId = payload.sub;
+      client.data.isAdmin = payload.isAdmin || false;
+      
+      // Adicionar ao room do usuário
+      client.join(`user-${payload.sub}`);
+      
+      console.log(`User ${payload.sub} connected (Admin: ${payload.isAdmin})`);
+      client.emit('connected', { userId: payload.sub });
+      
     } catch (error) {
+      console.log('WebSocket connection rejected:', error.message);
+      client.emit('error', { message: 'Authentication failed' });
       client.disconnect();
     }
   }
@@ -52,7 +78,13 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
     @MessageBody() scamId: string,
     @ConnectedSocket() client: Socket,
   ) {
+    // Verificar se o cliente está autenticado
+    if (!client.data.userId) {
+      return { error: 'Authentication required' };
+    }
+    
     client.join(`scam-${scamId}`);
+    console.log(`User ${client.data.userId} joined scam-${scamId}`);
     return { status: 'joined', scamId };
   }
 
@@ -61,12 +93,47 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
     @MessageBody() scamId: string,
     @ConnectedSocket() client: Socket,
   ) {
+    // Verificar se o cliente está autenticado
+    if (!client.data.userId) {
+      return { error: 'Authentication required' };
+    }
+    
     client.leave(`scam-${scamId}`);
+    console.log(`User ${client.data.userId} left scam-${scamId}`);
     return { status: 'left', scamId };
   }
 
-  // Métodos para emitir eventos
+  // Método privado para verificar se usuário é admin
+  private isAdmin(client: Socket): boolean {
+    return client.data.isAdmin === true;
+  }
+
+  // Evento para broadcast admin (requer admin)
+  @SubscribeMessage('admin-broadcast')
+  handleAdminBroadcast(
+    @MessageBody() data: { message: string; type: string },
+    @ConnectedSocket() client: Socket,
+  ) {
+    // Verificar se é admin
+    if (!this.isAdmin(client)) {
+      console.log(`Non-admin user ${client.data.userId} tried to broadcast`);
+      return { error: 'Admin access required' };
+    }
+    
+    // Enviar broadcast para todos
+    this.server.emit('admin-message', {
+      message: data.message,
+      type: data.type,
+      timestamp: new Date(),
+    });
+    
+    console.log(`Admin ${client.data.userId} sent broadcast: ${data.message}`);
+    return { status: 'broadcast sent' };
+  }
+
+  // Métodos para emitir eventos (usados internamente pelo servidor)
   emitNewScam(scam: any) {
+    // Apenas emite para usuários autenticados
     this.server.emit('new-scam', scam);
   }
 
@@ -83,6 +150,7 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
   }
 
   sendNotificationToUser(userId: string, notification: any) {
+    // Apenas envia para o usuário específico autenticado
     this.server.to(`user-${userId}`).emit('notification', notification);
   }
 }

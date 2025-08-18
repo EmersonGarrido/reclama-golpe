@@ -25,6 +25,14 @@ export class AdminController {
     return this.adminService.getSystemStats();
   }
 
+  @Get('stats/chart')
+  async getChartStats(
+    @Query('period') period?: string,
+    @CurrentUser() user?: any,
+  ) {
+    return this.adminService.getChartStats(period || '7days');
+  }
+
   @Get('recent-activity')
   async getRecentActivity(@CurrentUser() user: any) {
     return this.adminService.getRecentActivity();

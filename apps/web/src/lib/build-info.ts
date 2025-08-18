@@ -18,16 +18,16 @@ export function getBuildInfo(): BuildInfo {
   const buildNumber = process.env.NEXT_PUBLIC_BUILD_NUMBER || 
     `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}.${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`
   
-  // Build date and time
-  const buildDate = process.env.NEXT_PUBLIC_BUILD_DATE || now.toLocaleDateString('pt-BR')
-  const buildTime = process.env.NEXT_PUBLIC_BUILD_TIME || now.toLocaleTimeString('pt-BR')
+  // Build date and time with São Paulo timezone
+  const buildDate = process.env.NEXT_PUBLIC_BUILD_DATE || now.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+  const buildTime = process.env.NEXT_PUBLIC_BUILD_TIME || now.toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo' })
   
-  // Environment
-  const environment = process.env.NODE_ENV || 'development'
+  // Environment - Fix production detection
+  const environment = process.env.NODE_ENV === 'production' ? 'production' : 'development'
   
-  // Git info (if available)
+  // Git info (if available) - Fix branch name
   const commitHash = process.env.NEXT_PUBLIC_COMMIT_HASH
-  const branch = process.env.NEXT_PUBLIC_BRANCH
+  const branch = process.env.NEXT_PUBLIC_BRANCH === 'HEAD' ? 'main' : (process.env.NEXT_PUBLIC_BRANCH || 'main')
   
   return {
     version,

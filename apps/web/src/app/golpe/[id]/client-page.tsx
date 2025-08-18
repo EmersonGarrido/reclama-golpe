@@ -7,6 +7,7 @@ import CommentSection from '@/components/CommentSection'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { isAuthenticated, getToken, getCurrentUser } from '@/lib/auth'
+import LoginModal from '@/components/LoginModal'
 import { ResolutionSection } from '@/components/scam/resolution-section'
 
 const categoryColors: Record<string, string> = {
@@ -62,6 +63,7 @@ export default function ScamDetailClient({ scam: initialScam }: ScamDetailClient
   const [imageError, setImageError] = useState<Record<string, boolean>>({})
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [currentUser, setCurrentUser] = useState<any>(null)
+  const [showLoginModal, setShowLoginModal] = useState(false)
   const [shareMessage, setShareMessage] = useState('')
   const [showReportModal, setShowReportModal] = useState(false)
   const [reportData, setReportData] = useState({
@@ -85,10 +87,7 @@ export default function ScamDetailClient({ scam: initialScam }: ScamDetailClient
 
   const handleLike = async () => {
     if (!isLoggedIn) {
-      const confirm = window.confirm('Você precisa estar logado para curtir. Deseja fazer login?')
-      if (confirm) {
-        router.push('/login?returnUrl=' + window.location.pathname)
-      }
+      setShowLoginModal(true)
       return
     }
 
@@ -790,6 +789,13 @@ export default function ScamDetailClient({ scam: initialScam }: ScamDetailClient
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Login Modal */}
+      <LoginModal 
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        returnUrl={`/golpe/${scam.id}`}
+      />
     </motion.div>
   )
 }

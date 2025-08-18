@@ -28,7 +28,7 @@ export default function MaskedData({
     switch (type) {
       case 'email':
         const [localPart, domain] = value.split('@')
-        if (!domain) return '***'
+        if (!domain || !localPart) return '***'
         const maskedLocal = localPart.slice(0, 2) + '*'.repeat(Math.max(0, localPart.length - 2))
         return `${maskedLocal}@${domain}`
       

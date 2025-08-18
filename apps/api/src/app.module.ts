@@ -11,6 +11,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { CommentsModule } from './comments/comments.module';
 import { AdminModule } from './admin/admin.module';
 import { WebsocketModule } from './websocket/websocket.module';
+import { UploadModule } from './upload/upload.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
@@ -26,6 +27,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     CommentsModule,
     AdminModule,
     WebsocketModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [

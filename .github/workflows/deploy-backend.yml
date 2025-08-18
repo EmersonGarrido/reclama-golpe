@@ -1,0 +1,94 @@
+name: Deploy Backend to Production
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/api/**'
+      - 'prisma/**'
+      - 'package.json'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+jobs:
+  deploy:
+    name: Deploy API to VPS
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      
+      - name: Run tests
+        run: |
+          cd apps/api
+          npm install
+          npm run test:ci || true
+      
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            # Navegar para o diretório do projeto
+            cd /var/www/reclama-golpe
+            
+            # Criar backup antes de atualizar
+            BACKUP_DIR="/var/backups/reclama-golpe/$(date +%Y%m%d_%H%M%S)"
+            mkdir -p $BACKUP_DIR
+            tar -czf $BACKUP_DIR/code-backup.tar.gz -C /var/www/reclama-golpe .
+            
+            # Atualizar código
+            git fetch origin
+            git reset --hard origin/main
+            
+            # Instalar dependências
+            npm install
+            cd apps/api
+            npm install
+            
+            # Gerar Prisma Client
+            npx prisma generate
+            
+            # Executar migrations
+            npx prisma migrate deploy
+            
+            # Build da aplicação
+            npm run build
+            
+            # Reiniciar PM2
+            pm2 restart reclamagolpe-api || pm2 restart all
+            pm2 save
+            
+            # Verificar saúde
+            sleep 5
+            curl -f https://api.reclamagolpe.com.br/health || exit 1
+      
+      - name: Send notification on success
+        if: success()
+        run: |
+          echo "Deploy realizado com sucesso!"
+          # Aqui você pode adicionar notificações (Slack, Discord, etc)
+      
+      - name: Send notification on failure
+        if: failure()
+        run: |
+          echo "Deploy falhou! Verifique os logs."
+          # Aqui você pode adicionar notificações de erro

@@ -297,6 +297,29 @@ export default function DenunciarPage() {
 
     setLoading(true)
     try {
+      // Fazer upload das imagens primeiro se houver
+      let uploadedImages: string[] = []
+      
+      if (images.length > 0 && isLoggedIn) {
+        const formData = new FormData()
+        images.forEach(image => {
+          formData.append('files', image)
+        })
+
+        const uploadResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333'}/upload/multiple`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${getToken()}`
+          },
+          body: formData,
+        })
+
+        if (uploadResponse.ok) {
+          const uploadedFiles = await uploadResponse.json()
+          uploadedImages = uploadedFiles.map((file: any) => file.filename)
+        }
+      }
+
       // Preparar dados para envio
       const submitData: any = {
         title: data.title,
@@ -312,9 +335,9 @@ export default function DenunciarPage() {
       if (data.amountLost) submitData.amountLost = Number(data.amountLost)
       if (data.dateOccurred) submitData.dateOccurred = data.dateOccurred
 
-      // Por enquanto, enviar sem arquivos (adicionar upload de arquivos depois)
-      const evidence: string[] = []
-      if (images.length > 0) evidence.push('images_uploaded.jpg')
+      // Adicionar imagens enviadas ou fallback
+      const evidence: string[] = uploadedImages.length > 0 ? uploadedImages : []
+      if (images.length > 0 && uploadedImages.length === 0) evidence.push('images_uploaded.jpg')
       if (documents.length > 0) evidence.push('documents_uploaded.pdf')
       if (evidence.length > 0) submitData.evidence = evidence
 

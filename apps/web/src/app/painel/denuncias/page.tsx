@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { isAuthenticated, getUser } from '@/lib/auth'
+import { getApiUrl } from '@/config/api'
 
 interface Scam {
   id: string
@@ -44,7 +45,7 @@ export default function MyScamsPage() {
 
       const token = localStorage.getItem('token')
       const response = await fetch(
-        `http://localhost:3333/users/${user.id}/scams?page=${page}&limit=10`,
+        getApiUrl(`users/${user.id}/scams?page=${page}&limit=10`),
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -77,7 +78,7 @@ export default function MyScamsPage() {
 
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`http://localhost:3333/scams/${scamId}`, {
+      const response = await fetch(getApiUrl(`scams/${scamId}`), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

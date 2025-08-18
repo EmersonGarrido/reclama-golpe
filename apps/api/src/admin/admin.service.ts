@@ -34,7 +34,7 @@ export class AdminService {
     });
 
     // Formatar dados para o gráfico
-    const chartData = [];
+    const chartData: { date: string; scams: number; users: number; }[] = [];
     for (let i = 0; i < days; i++) {
       const date = new Date();
       date.setDate(date.getDate() - i);

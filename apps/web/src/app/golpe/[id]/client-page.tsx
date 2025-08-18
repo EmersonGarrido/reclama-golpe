@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { isAuthenticated, getToken, getCurrentUser } from '@/lib/auth'
 import LoginModal from '@/components/LoginModal'
+import { getApiUrl } from '@/config/api'
 import { ResolutionSection } from '@/components/scam/resolution-section'
 
 const categoryColors: Record<string, string> = {
@@ -326,7 +327,7 @@ export default function ScamDetailClient({ scam: initialScam }: ScamDetailClient
                         >
                           {!imageError[image] ? (
                             <img
-                              src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333'}/uploads/${image}`}
+                              src={image.startsWith('http') ? image : getApiUrl(`uploads/${image}`)}
                               alt={`Evidência ${index + 1}`}
                               className="w-full h-40 object-cover"
                               onError={() => setImageError(prev => ({ ...prev, [image]: true }))}
@@ -658,7 +659,7 @@ export default function ScamDetailClient({ scam: initialScam }: ScamDetailClient
                 </svg>
               </button>
               <img
-                src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333'}/uploads/${selectedImage}`}
+                src={selectedImage.startsWith('http') ? selectedImage : getApiUrl(`uploads/${selectedImage}`)}
                 alt="Evidência ampliada"
                 className="w-full h-full object-contain rounded-lg"
               />

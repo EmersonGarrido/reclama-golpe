@@ -8,6 +8,7 @@ import * as yup from 'yup'
 import { useDropzone } from 'react-dropzone'
 import { motion, AnimatePresence } from 'framer-motion'
 import { isAuthenticated, getToken } from '@/lib/auth'
+import SuccessModal from '@/components/SuccessModal'
 
 // Schema de validação dividido por steps
 const stepSchemas = {
@@ -164,6 +165,7 @@ export default function DenunciarPage() {
   const [phoneValue, setPhoneValue] = useState('')
   const [amountValue, setAmountValue] = useState('')
   const [categories, setCategories] = useState<any[]>([])
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
 
   const {
     register,
@@ -358,9 +360,8 @@ export default function DenunciarPage() {
 
       const result = await response.json()
       
-      // Mostrar mensagem de moderação
-      alert(result.message || 'Denúncia enviada com sucesso! Ela será revisada pela nossa equipe de moderação antes de ser publicada.')
-      router.push('/painel/denuncias')
+      // Mostrar modal de sucesso
+      setShowSuccessModal(true)
     } catch (error) {
       console.error('Erro ao enviar denúncia:', error)
       alert('Erro ao enviar denúncia. Por favor, tente novamente.')
@@ -1098,6 +1099,19 @@ export default function DenunciarPage() {
           </AnimatePresence>
         </form>
       </div>
+      
+      {/* Success Modal */}
+      <SuccessModal 
+        isOpen={showSuccessModal}
+        onClose={() => {
+          setShowSuccessModal(false)
+          router.push('/painel/denuncias')
+        }}
+        title="Denúncia Enviada!"
+        message="Sua denúncia foi enviada com sucesso e será revisada pela nossa equipe de moderação antes de ser publicada."
+        redirectTo="/painel/denuncias"
+        buttonText="Ver Minhas Denúncias"
+      />
     </motion.div>
   )
 }

@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { ScamsService } from './scams.service';
 import { CreateScamDto, UpdateScamDto, FilterScamsDto } from './dto/scam.dto';
@@ -43,7 +44,7 @@ export class ScamsController {
   ) {
     // Verificar se é admin
     if (!user?.isAdmin) {
-      throw new Error('Acesso negado');
+      throw new ForbiddenException('Acesso negado. Apenas administradores.');
     }
 
     const filters: any = {};

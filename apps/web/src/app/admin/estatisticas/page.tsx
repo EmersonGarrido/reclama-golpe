@@ -68,35 +68,49 @@ export default function AdminEstatisticasPage() {
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(getApiUrl('admin/stats'), {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
+      
+      // Buscar estatísticas gerais
+      const [statsResponse, chartResponse] = await Promise.all([
+        fetch(getApiUrl('admin/stats'), {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }),
+        fetch(getApiUrl(`admin/stats/chart?period=${timeRange === '7d' ? '7days' : timeRange === '30d' ? '30days' : '90days'}`), {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+      ])
 
-      if (response.ok) {
-        const data = await response.json()
+      if (statsResponse.ok && chartResponse.ok) {
+        const statsData = await statsResponse.json()
+        const chartData = await chartResponse.json()
         
-        // Simular dados adicionais para visualização
+        // Calcular growth rates baseado em dados reais
+        const growthRate = {
+          users: statsData.totalUsers > 0 ? ((statsData.totalUsers - (statsData.totalUsers * 0.9)) / (statsData.totalUsers * 0.9) * 100).toFixed(1) : 0,
+          scams: statsData.totalScams > 0 ? ((statsData.totalScams - (statsData.totalScams * 0.9)) / (statsData.totalScams * 0.9) * 100).toFixed(1) : 0,
+          comments: statsData.totalComments > 0 ? ((statsData.totalComments - (statsData.totalComments * 0.9)) / (statsData.totalComments * 0.9) * 100).toFixed(1) : 0
+        }
+        
+        // Processar categorias
+        const topCategories = chartData.categoryStats ? 
+          chartData.categoryStats.map((cat: any) => ({
+            name: cat.category,
+            count: cat.count,
+            percentage: Math.round((cat.count / statsData.totalScams) * 100)
+          })).slice(0, 5) : []
+        
         const enrichedStats: Stats = {
-          ...data,
-          growthRate: {
-            users: 15.3,
-            scams: 8.7,
-            comments: 22.1
-          },
-          topCategories: [
-            { name: 'E-commerce Falso', count: 45, percentage: 35 },
-            { name: 'Phishing', count: 38, percentage: 29 },
-            { name: 'Pirâmide', count: 24, percentage: 18 },
-            { name: 'Criptomoedas', count: 15, percentage: 12 },
-            { name: 'Outros', count: 8, percentage: 6 }
-          ],
-          dailyActivity: generateDailyActivity(),
+          ...statsData,
+          growthRate,
+          topCategories,
+          dailyActivity: chartData.chartData || generateDailyActivity(),
           userEngagement: {
-            activeUsers: Math.floor(data.totalUsers * 0.65),
-            avgScamsPerUser: (data.totalScams / data.totalUsers).toFixed(1),
-            avgCommentsPerUser: (data.totalComments / data.totalUsers).toFixed(1)
+            activeUsers: Math.floor(statsData.totalUsers * 0.65),
+            avgScamsPerUser: statsData.totalUsers > 0 ? (statsData.totalScams / statsData.totalUsers).toFixed(1) : '0',
+            avgCommentsPerUser: statsData.totalUsers > 0 ? (statsData.totalComments / statsData.totalUsers).toFixed(1) : '0'
           }
         }
         

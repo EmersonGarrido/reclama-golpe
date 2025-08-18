@@ -6,6 +6,7 @@ import { join } from 'path';
 import { securityConfig } from './config/security.config';
 import { HttpsRedirectMiddleware } from './middleware/https-redirect.middleware';
 import { SecurityHeadersMiddleware } from './middleware/security-headers.middleware';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -42,7 +43,8 @@ async function bootstrap() {
       if (corsConfig.origins.includes(origin)) {
         callback(null, true);
       } else {
-        console.warn(`CORS blocked request from origin: ${origin}`);
+        // Log blocked CORS requests through audit service
+        // This will be logged by the CORS middleware
         callback(new Error('Not allowed by CORS'));
       }
     },
@@ -51,6 +53,9 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3333;
   await app.listen(port);
-  console.log(`🚀 API running on http://localhost:${port}`);
+  
+  // Use logger instead of console.log
+  const logger = app.get(WINSTON_MODULE_NEST_PROVIDER);
+  logger.log(`🚀 API running on http://localhost:${port}`, 'Bootstrap');
 }
 bootstrap();

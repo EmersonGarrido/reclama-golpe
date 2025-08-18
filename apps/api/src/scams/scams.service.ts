@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { WebsocketGateway } from '../websocket/websocket.gateway';
 import { CreateScamDto, UpdateScamDto, FilterScamsDto } from './dto/scam.dto';
@@ -6,6 +6,8 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ScamsService {
+  private readonly logger = new Logger('ScamsService');
+
   constructor(
     private prisma: PrismaService,
     private websocket: WebsocketGateway,
@@ -170,7 +172,7 @@ export class ScamsService {
   async findOne(id: string, userId?: string) {
     // Log para debug em produção
     if (id === 'admin') {
-      console.error('ERRO: Rota /scams/admin está caindo em findOne! Verifique a ordem das rotas.');
+      this.logger.error('ERRO: Rota /scams/admin está caindo em findOne! Verifique a ordem das rotas.');
       throw new NotFoundException('Rota incorreta - use a rota específica de admin');
     }
     

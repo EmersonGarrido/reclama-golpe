@@ -6,88 +6,72 @@ import {
   UploadedFiles,
   UseGuards,
   BadRequestException,
+  Req,
+  Get,
+  Param,
+  Delete,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { v4 as uuidv4 } from 'uuid';
+import { UploadService } from './upload.service';
+import { FileValidationInterceptor } from '../interceptors/file-validation.interceptor';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
 
 @Controller('upload')
+@UseGuards(JwtAuthGuard)
+@UseInterceptors(FileValidationInterceptor)
 export class UploadController {
+  constructor(private readonly uploadService: UploadService) {}
+
   @Post('single')
-  @UseGuards(JwtAuthGuard)
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: (req, file, cb) => {
-          const uniqueSuffix = uuidv4();
-          const ext = extname(file.originalname);
-          cb(null, `${uniqueSuffix}${ext}`);
-        },
-      }),
-      fileFilter: (req, file, cb) => {
-        // Aceitar apenas imagens
-        if (!file.mimetype.match(/\/(jpg|jpeg|png|gif|webp)$/)) {
-          return cb(new BadRequestException('Apenas imagens são permitidas'), false);
-        }
-        cb(null, true);
-      },
-      limits: {
-        fileSize: 5 * 1024 * 1024, // 5MB
-      },
-    }),
-  )
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+    @CurrentUser() user: any,
+  ) {
     if (!file) {
       throw new BadRequestException('Arquivo não enviado');
     }
 
+    const metadata = await this.uploadService.processUploadedFile(file, user.id);
+
     return {
-      filename: file.filename,
-      originalName: file.originalname,
-      size: file.size,
-      mimetype: file.mimetype,
+      ...metadata,
       url: `/uploads/${file.filename}`,
     };
   }
 
   @Post('multiple')
-  @UseGuards(JwtAuthGuard)
-  @UseInterceptors(
-    FilesInterceptor('files', 5, {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: (req, file, cb) => {
-          const uniqueSuffix = uuidv4();
-          const ext = extname(file.originalname);
-          cb(null, `${uniqueSuffix}${ext}`);
-        },
-      }),
-      fileFilter: (req, file, cb) => {
-        // Aceitar imagens e PDFs
-        if (!file.mimetype.match(/\/(jpg|jpeg|png|gif|webp|pdf)$/)) {
-          return cb(new BadRequestException('Apenas imagens e PDFs são permitidos'), false);
-        }
-        cb(null, true);
-      },
-      limits: {
-        fileSize: 10 * 1024 * 1024, // 10MB
-      },
-    }),
-  )
-  uploadMultipleFiles(@UploadedFiles() files: Express.Multer.File[]) {
+  @UseInterceptors(FilesInterceptor('files', 5))
+  async uploadMultipleFiles(
+    @UploadedFiles() files: Express.Multer.File[],
+    @CurrentUser() user: any,
+  ) {
     if (!files || files.length === 0) {
       throw new BadRequestException('Nenhum arquivo enviado');
     }
 
-    return files.map(file => ({
-      filename: file.filename,
-      originalName: file.originalname,
-      size: file.size,
-      mimetype: file.mimetype,
-      url: `/uploads/${file.filename}`,
+    const processedFiles = await Promise.all(
+      files.map(file => this.uploadService.processUploadedFile(file, user.id))
+    );
+
+    return processedFiles.map((metadata, index) => ({
+      ...metadata,
+      url: `/uploads/${files[index].filename}`,
     }));
+  }
+
+  @Get(':filename')
+  async getFileInfo(@Param('filename') filename: string) {
+    return this.uploadService.getFileInfo(filename);
+  }
+
+  @Delete(':filename')
+  async deleteFile(
+    @Param('filename') filename: string,
+    @CurrentUser() user: any,
+  ) {
+    await this.uploadService.deleteFile(filename, user.id);
+    return { message: 'Arquivo deletado com sucesso' };
   }
 }

@@ -144,7 +144,7 @@ A aplicação apresenta vulnerabilidades críticas que devem ser corrigidas imed
 
 Se você encontrar novas vulnerabilidades:
 1. **NÃO** as explore maliciosamente
-2. Reporte privadamente para: emerson@garrido.dev
+2. Reporte privadamente para: emersongarrido.dev@gmail.com
 3. Aguarde a correção antes de divulgar publicamente
 4. Seja reconhecido como contribuidor de segurança
 

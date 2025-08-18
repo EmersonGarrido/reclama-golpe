@@ -43,7 +43,8 @@ export default function LoginPage() {
       
       // Redirecionar para a página anterior ou home
       const returnUrl = new URLSearchParams(window.location.search).get('returnUrl')
-      router.push(returnUrl || '/')
+      // Usar replace ao invés de push para forçar atualização
+      window.location.href = returnUrl || '/'
     } catch (err: any) {
       setError(err.message || `Erro ao ${isLogin ? 'fazer login' : 'criar conta'}`)
     } finally {

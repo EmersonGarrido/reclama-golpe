@@ -24,17 +24,17 @@ try {
   console.log('Git information not available');
 }
 
-// Generate build information
+// Generate build information with São Paulo timezone
 const now = new Date();
 const buildInfo = {
   version: packageJson.version || '1.0.0',
   buildNumber: `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}.${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`,
-  buildDate: now.toLocaleDateString('pt-BR'),
-  buildTime: now.toLocaleTimeString('pt-BR'),
+  buildDate: now.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
+  buildTime: now.toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
   timestamp: now.toISOString(),
   environment: process.env.NODE_ENV || 'development',
   gitHash,
-  gitBranch,
+  gitBranch: gitBranch === 'HEAD' ? 'main' : gitBranch, // Fix for detached HEAD state
 };
 
 // Create build-info.json

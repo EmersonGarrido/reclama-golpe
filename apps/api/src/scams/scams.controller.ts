@@ -184,14 +184,14 @@ export class ScamsController {
     return this.scamsService.getComments(id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Public()
   @Post(':id/report')
   async reportScam(
     @Param('id') id: string,
     @Body() reportData: { reason: string; description: string; email?: string },
-    @CurrentUser() user: any,
+    @CurrentUser() user?: any,
   ) {
-    return this.scamsService.reportScam(id, { ...reportData, userId: user.id });
+    return this.scamsService.reportScam(id, { ...reportData, userId: user?.id || null });
   }
 
   @UseGuards(JwtAuthGuard)

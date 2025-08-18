@@ -14,7 +14,7 @@ interface UserProfile {
   createdAt: string;
 }
 
-export const API_URL =
+const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3333";
 
 export default function ProfilePage() {

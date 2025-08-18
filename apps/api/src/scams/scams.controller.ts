@@ -10,6 +10,7 @@ import {
   UseGuards,
   ForbiddenException,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { ScamsService } from './scams.service';
 import { CreateScamDto, UpdateScamDto, FilterScamsDto } from './dto/scam.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -22,6 +23,7 @@ export class ScamsController {
   constructor(private readonly scamsService: ScamsService) {}
 
   @UseGuards(JwtAuthGuard)
+  @Throttle({ default: { limit: 10, ttl: 60000 } }) // 10 denúncias por minuto por usuário
   @Post()
   async create(
     @Body() createScamDto: CreateScamDto,

@@ -8,7 +8,7 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 @WebSocketGateway({
@@ -21,6 +21,7 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
   @WebSocketServer()
   server: Server;
 
+  private readonly logger = new Logger('WebSocketGateway');
   private connectedUsers = new Map<string, string>();
 
   constructor(private jwtService: JwtService) {}
@@ -31,7 +32,7 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
       const token = client.handshake.auth.token || client.handshake.headers.authorization?.replace('Bearer ', '');
       
       if (!token) {
-        console.log('WebSocket connection rejected: No token provided');
+        this.logger.warn('WebSocket connection rejected: No token provided');
         client.emit('error', { message: 'Authentication required' });
         client.disconnect();
         return;
@@ -41,7 +42,7 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
       const payload = this.jwtService.verify(token);
       
       if (!payload || !payload.sub) {
-        console.log('WebSocket connection rejected: Invalid token payload');
+        this.logger.warn('WebSocket connection rejected: Invalid token payload');
         client.emit('error', { message: 'Invalid authentication' });
         client.disconnect();
         return;
@@ -55,11 +56,11 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
       // Adicionar ao room do usuário
       client.join(`user-${payload.sub}`);
       
-      console.log(`User ${payload.sub} connected (Admin: ${payload.isAdmin})`);
+      this.logger.log(`User ${payload.sub} connected (Admin: ${payload.isAdmin})`);
       client.emit('connected', { userId: payload.sub });
       
     } catch (error) {
-      console.log('WebSocket connection rejected:', error.message);
+      this.logger.error('WebSocket connection rejected:', error.message);
       client.emit('error', { message: 'Authentication failed' });
       client.disconnect();
     }
@@ -69,7 +70,7 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
     const userId = this.connectedUsers.get(client.id);
     if (userId) {
       this.connectedUsers.delete(client.id);
-      console.log(`User ${userId} disconnected`);
+      this.logger.log(`User ${userId} disconnected`);
     }
   }
 
@@ -84,7 +85,7 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
     }
     
     client.join(`scam-${scamId}`);
-    console.log(`User ${client.data.userId} joined scam-${scamId}`);
+    this.logger.log(`User ${client.data.userId} joined scam-${scamId}`);
     return { status: 'joined', scamId };
   }
 
@@ -99,7 +100,7 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
     }
     
     client.leave(`scam-${scamId}`);
-    console.log(`User ${client.data.userId} left scam-${scamId}`);
+    this.logger.log(`User ${client.data.userId} left scam-${scamId}`);
     return { status: 'left', scamId };
   }
 
@@ -116,7 +117,7 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
   ) {
     // Verificar se é admin
     if (!this.isAdmin(client)) {
-      console.log(`Non-admin user ${client.data.userId} tried to broadcast`);
+      this.logger.warn(`Non-admin user ${client.data.userId} tried to broadcast`);
       return { error: 'Admin access required' };
     }
     
@@ -127,7 +128,7 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
       timestamp: new Date(),
     });
     
-    console.log(`Admin ${client.data.userId} sent broadcast: ${data.message}`);
+    this.logger.log(`Admin ${client.data.userId} sent broadcast: ${data.message}`);
     return { status: 'broadcast sent' };
   }
 

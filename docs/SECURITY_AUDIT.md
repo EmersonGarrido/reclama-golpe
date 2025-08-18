@@ -152,13 +152,56 @@ Se você encontrar novas vulnerabilidades:
 
 - [ ] Trocar JWT_SECRET e usar gerador criptográfico
 - [ ] Remover credenciais do arquivo .env
-- [ ] Implementar rate limiting
+- [x] Implementar rate limiting ✅ (18/08/2025)
 - [ ] Migrar localStorage para cookies httpOnly
 - [ ] Adicionar Helmet
 - [ ] Remover console.log
-- [ ] Configurar CORS para produção
+- [x] Configurar CORS para produção ✅ (18/08/2025)
 - [ ] Implementar validação de uploads
-- [ ] Adicionar logs de auditoria
-- [ ] Configurar HTTPS obrigatório
+- [x] Adicionar logs de auditoria ✅ (18/08/2025)
+- [x] Configurar HTTPS obrigatório ✅ (18/08/2025)
 - [ ] Implementar 2FA para admins
 - [ ] Adicionar testes de segurança
+
+## Atualizações de Segurança Implementadas
+
+### 18/08/2025 - Rate Limiting, CORS, Logs de Auditoria e HTTPS
+
+#### Rate Limiting (@nestjs/throttler)
+- **Global**: 100 requisições por minuto
+- **Login**: 5 tentativas por minuto
+- **Registro**: 3 cadastros por minuto
+- **Criar Denúncia**: 10 denúncias por minuto
+- Configuração centralizada em `security.config.ts`
+
+#### CORS
+- Configuração dinâmica baseada em ambiente (NODE_ENV)
+- **Produção**: Apenas domínios reclamagolpe.com.br
+- **Desenvolvimento**: localhost:3000, localhost:3001
+- Headers e métodos permitidos configurados
+- Cache de preflight: 24 horas
+
+#### Logs de Auditoria (Winston)
+- Sistema completo de logging com Winston
+- Logs rotativos diários com compressão
+- Níveis de log: audit, error, combined
+- Auditoria de ações sensíveis:
+  - Login/Logout (sucesso e falha)
+  - Registro de usuários
+  - Operações CRUD em denúncias
+  - Ações administrativas
+  - Eventos de segurança
+- Interceptor para log de todas requisições HTTP
+- Sanitização de dados sensíveis (senhas)
+
+#### HTTPS Obrigatório
+- Redirecionamento automático HTTP → HTTPS em produção
+- Headers de segurança implementados:
+  - Strict-Transport-Security (HSTS)
+  - X-Content-Type-Options: nosniff
+  - X-Frame-Options: DENY
+  - X-XSS-Protection
+  - Content-Security-Policy
+  - Referrer-Policy
+- Trust proxy configurado para ambientes com reverse proxy
+- Middleware de segurança para todas requisições

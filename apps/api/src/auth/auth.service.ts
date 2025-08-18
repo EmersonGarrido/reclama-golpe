@@ -1,6 +1,8 @@
 import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
+import { AuditService } from '../audit/audit.service';
+import { AuditAction } from '../config/logger.config';
 import { RegisterDto, LoginDto, AuthResponseDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
 
@@ -9,6 +11,7 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
+    private auditService: AuditService,
   ) {}
 
   async register(registerDto: RegisterDto): Promise<AuthResponseDto> {
@@ -31,6 +34,16 @@ export class AuthService {
         password: hashedPassword,
       },
     });
+
+    // Log successful registration
+    await this.auditService.logAuth(
+      AuditAction.REGISTER,
+      email,
+      true,
+      undefined,
+      undefined,
+      { userId: user.id, name },
+    );
 
     const token = this.generateToken(user);
 
@@ -65,6 +78,16 @@ export class AuthService {
     if (!user.isActive) {
       throw new UnauthorizedException('Conta desativada');
     }
+
+    // Log successful login
+    await this.auditService.logAuth(
+      AuditAction.LOGIN_SUCCESS,
+      email,
+      true,
+      undefined,
+      undefined,
+      { userId: user.id },
+    );
 
     const token = this.generateToken(user);
 

@@ -59,6 +59,7 @@ export default function ScamDetailClient({ scam: initialScam }: ScamDetailClient
   const router = useRouter()
   const [scam, setScam] = useState(initialScam)
   const [liked, setLiked] = useState(false)
+  const [saved, setSaved] = useState(false)
   const [likeCount, setLikeCount] = useState(scam._count.likes)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [imageError, setImageError] = useState<Record<string, boolean>>({})
@@ -78,7 +79,28 @@ export default function ScamDetailClient({ scam: initialScam }: ScamDetailClient
     setIsLoggedIn(isAuthenticated())
     const user = getCurrentUser()
     setCurrentUser(user)
+    
+    // Verificar se o golpe está salvo
+    if (isAuthenticated()) {
+      checkIfSaved()
+    }
   }, [])
+
+  const checkIfSaved = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333'}/saved-scams/check/${scam.id}`, {
+        headers: {
+          'Authorization': `Bearer ${getToken()}`,
+        },
+      })
+      if (response.ok) {
+        const data = await response.json()
+        setSaved(data.isSaved)
+      }
+    } catch (error) {
+      console.error('Erro ao verificar se está salvo:', error)
+    }
+  }
 
   const formattedDate = new Date(scam.createdAt).toLocaleDateString('pt-BR', {
     day: 'numeric',
@@ -108,6 +130,30 @@ export default function ScamDetailClient({ scam: initialScam }: ScamDetailClient
       }
     } catch (error) {
       console.error('Erro ao curtir:', error)
+    }
+  }
+
+  const handleSave = async () => {
+    if (!isLoggedIn) {
+      setShowLoginModal(true)
+      return
+    }
+
+    try {
+      const method = saved ? 'DELETE' : 'POST'
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333'}/saved-scams/${scam.id}`, {
+        method,
+        headers: {
+          'Authorization': `Bearer ${getToken()}`,
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (response.ok) {
+        setSaved(!saved)
+      }
+    } catch (error) {
+      console.error('Erro ao salvar/remover:', error)
     }
   }
 
@@ -426,6 +472,22 @@ export default function ScamDetailClient({ scam: initialScam }: ScamDetailClient
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
                     <span className="font-medium">{likeCount} Curtidas</span>
+                  </motion.button>
+
+                  <motion.button 
+                    onClick={handleSave}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                      saved 
+                        ? 'bg-yellow-100 text-yellow-700 border-2 border-yellow-300' 
+                        : 'bg-gray-100 text-gray-600 border-2 border-gray-300 hover:bg-gray-200'
+                    }`}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <svg className="w-5 h-5" fill={saved ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                    </svg>
+                    <span className="font-medium">{saved ? 'Salvo' : 'Salvar'}</span>
                   </motion.button>
 
                   <div className="relative">

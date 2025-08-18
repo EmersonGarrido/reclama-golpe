@@ -19,6 +19,19 @@ interface VerificationResult {
   }>
 }
 
+const categoryLabels: Record<string, string> = {
+  PHISHING: 'Phishing',
+  PYRAMID_SCHEME: 'Pirâmide Financeira',
+  FAKE_ECOMMERCE: 'E-commerce Falso',
+  INVESTMENT_FRAUD: 'Fraude de Investimento',
+  ROMANCE_SCAM: 'Golpe Romântico',
+  JOB_SCAM: 'Golpe de Emprego',
+  LOTTERY_SCAM: 'Golpe de Loteria',
+  TECH_SUPPORT: 'Suporte Técnico Falso',
+  CRYPTOCURRENCY: 'Golpe de Criptomoedas',
+  OTHER: 'Outros'
+}
+
 export default function VerificarPage() {
   const [domain, setDomain] = useState('')
   const [loading, setLoading] = useState(false)
@@ -265,7 +278,7 @@ export default function VerificarPage() {
                                 {scam.title}
                               </Link>
                               <p className="text-sm opacity-75 mt-1">
-                                {scam.category} • {scam.views} visualizações
+                                {categoryLabels[scam.category] || scam.category} • {scam.views} visualizações
                               </p>
                             </div>
                             <span className="text-sm opacity-75">

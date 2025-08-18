@@ -64,7 +64,7 @@ export default function AdminScamsPage() {
       else if (filter === 'resolved') statusFilter = '&isResolved=true'
       
       const response = await fetch(
-        getApiUrl(`scams/admin?page=${page}&limit=20${statusFilter}`),
+        getApiUrl(`scams/for-admin?page=${page}&limit=20${statusFilter}`),
         {
           headers: {
             'Authorization': `Bearer ${token}`

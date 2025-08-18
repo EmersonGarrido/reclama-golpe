@@ -30,9 +30,42 @@ export class ScamsController {
     return this.scamsService.create(createScamDto, user.id);
   }
 
+  // IMPORTANTE: Esta rota DEVE vir antes de :id
   @Get('admin')
   @UseGuards(JwtAuthGuard, AdminGuard) // Protege com ambos os guards
   async findAllAdmin(
+    @Query('category') category?: string,
+    @Query('status') status?: string,
+    @Query('search') search?: string,
+    @Query('userId') userId?: string,
+    @Query('sortBy') sortBy?: string,
+    @Query('order') order?: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @CurrentUser() user?: any,
+  ) {
+
+    const filters: any = {};
+    if (category) filters.category = category;
+    if (status) filters.status = status;
+    if (search) filters.search = search;
+    if (userId) filters.userId = userId;
+    if (sortBy) filters.sortBy = sortBy;
+    if (order) filters.order = order;
+    
+    // Admin sempre vê todas as denúncias
+    return this.scamsService.findAll(
+      filters,
+      page ? parseInt(page) : 1,
+      limit ? parseInt(limit) : 20,
+      true, // isAdmin = true
+    );
+  }
+
+  // Rota alternativa para admin (temporária para debug)
+  @Get('for-admin')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  async findAllForAdmin(
     @Query('category') category?: string,
     @Query('status') status?: string,
     @Query('search') search?: string,

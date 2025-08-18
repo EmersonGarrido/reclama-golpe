@@ -168,6 +168,12 @@ export class ScamsService {
   }
 
   async findOne(id: string, userId?: string) {
+    // Log para debug em produção
+    if (id === 'admin') {
+      console.error('ERRO: Rota /scams/admin está caindo em findOne! Verifique a ordem das rotas.');
+      throw new NotFoundException('Rota incorreta - use a rota específica de admin');
+    }
+    
     const scam = await this.prisma.scam.findUnique({
       where: { id },
       include: {

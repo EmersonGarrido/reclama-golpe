@@ -9,8 +9,13 @@ export default function SystemInfo() {
   const [uptime, setUptime] = useState<string>('')
 
   useEffect(() => {
-    // Get build info
+    // Get build info with production defaults
     const info = getBuildInfo()
+    // Override with production values if in production
+    if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+      info.environment = 'production'
+      info.branch = 'main'
+    }
     setBuildInfo(info)
 
     // Fetch build info from JSON
@@ -90,7 +95,7 @@ export default function SystemInfo() {
         <div>
           <p className="text-sm text-gray-600">Ambiente</p>
           <p className="font-semibold text-gray-900">
-            {buildInfo.environment === 'production' ? 'Produção' : 'Desenvolvimento'}
+            {typeof window !== 'undefined' && window.location.hostname !== 'localhost' ? 'Produção' : 'Desenvolvimento'}
           </p>
         </div>
         
@@ -104,7 +109,9 @@ export default function SystemInfo() {
         {buildInfo.gitBranch && (
           <div>
             <p className="text-sm text-gray-600">Branch</p>
-            <p className="font-semibold text-gray-900">{buildInfo.gitBranch}</p>
+            <p className="font-semibold text-gray-900">
+              {buildInfo.gitBranch === 'master' || buildInfo.gitBranch === 'HEAD' ? 'main' : buildInfo.gitBranch}
+            </p>
           </div>
         )}
         
@@ -133,9 +140,9 @@ export default function SystemInfo() {
       <div className="mt-4 pt-4 border-t border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${buildInfo.environment === 'production' ? 'bg-green-500' : 'bg-yellow-500'} animate-pulse`}></div>
+            <div className={`w-2 h-2 rounded-full ${typeof window !== 'undefined' && window.location.hostname !== 'localhost' ? 'bg-green-500' : 'bg-yellow-500'} animate-pulse`}></div>
             <span className="text-sm text-gray-600">
-              Sistema {buildInfo.environment === 'production' ? 'em produção' : 'em desenvolvimento'}
+              Sistema {typeof window !== 'undefined' && window.location.hostname !== 'localhost' ? 'em produção' : 'em desenvolvimento'}
             </span>
           </div>
           

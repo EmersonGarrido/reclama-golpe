@@ -1,10 +1,10 @@
 {
   "version": "1.0.0",
-  "buildNumber": "20250817.2208",
-  "buildDate": "17/08/2025",
-  "buildTime": "22:08:31",
-  "timestamp": "2025-08-18T01:08:31.973Z",
-  "environment": "development",
-  "gitHash": "7f58d73d6297526e41470edf2d9545b3f8668d7b",
+  "buildNumber": "20250818.1200",
+  "buildDate": "18/08/2025",
+  "buildTime": "12:00:00",
+  "timestamp": "2025-08-18T15:00:00.000Z",
+  "environment": "production",
+  "gitHash": "production",
   "gitBranch": "main"
 }

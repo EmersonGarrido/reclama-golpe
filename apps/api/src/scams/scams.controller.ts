@@ -13,6 +13,7 @@ import {
 import { ScamsService } from './scams.service';
 import { CreateScamDto, UpdateScamDto, FilterScamsDto } from './dto/scam.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { AdminGuard } from '../auth/guards/admin.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { Public } from '../auth/decorators/public.decorator';
 
@@ -30,7 +31,7 @@ export class ScamsController {
   }
 
   @Get('admin')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, AdminGuard) // Protege com ambos os guards
   async findAllAdmin(
     @Query('category') category?: string,
     @Query('status') status?: string,
@@ -42,10 +43,6 @@ export class ScamsController {
     @Query('limit') limit?: string,
     @CurrentUser() user?: any,
   ) {
-    // Verificar se é admin
-    if (!user?.isAdmin) {
-      throw new ForbiddenException('Acesso negado. Apenas administradores.');
-    }
 
     const filters: any = {};
     if (category) filters.category = category;

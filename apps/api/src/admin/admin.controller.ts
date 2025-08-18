@@ -7,46 +7,36 @@ import {
   Param,
   Body,
   UseGuards,
+  Query,
   ForbiddenException,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { AdminGuard } from '../auth/guards/admin.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 
 @Controller('admin')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, AdminGuard) // Aplica ambos os guards em todas as rotas
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Get('stats')
   async getSystemStats(@CurrentUser() user: any) {
-    if (!user.isAdmin) {
-      throw new ForbiddenException('Acesso negado. Apenas administradores.');
-    }
     return this.adminService.getSystemStats();
   }
 
   @Get('recent-activity')
   async getRecentActivity(@CurrentUser() user: any) {
-    if (!user.isAdmin) {
-      throw new ForbiddenException('Acesso negado. Apenas administradores.');
-    }
     return this.adminService.getRecentActivity();
   }
 
   @Get('reports')
   async getPendingReports(@CurrentUser() user: any) {
-    if (!user.isAdmin) {
-      throw new ForbiddenException('Acesso negado. Apenas administradores.');
-    }
     return this.adminService.getPendingReports();
   }
 
   @Get('users')
   async getAllUsers(@CurrentUser() user: any) {
-    if (!user.isAdmin) {
-      throw new ForbiddenException('Acesso negado. Apenas administradores.');
-    }
     return this.adminService.getAllUsers();
   }
 
@@ -55,9 +45,6 @@ export class AdminController {
     @CurrentUser() user: any,
     @Param('id') userId: string,
   ) {
-    if (!user.isAdmin) {
-      throw new ForbiddenException('Acesso negado. Apenas administradores.');
-    }
     return this.adminService.toggleUserAdmin(userId);
   }
 
@@ -66,9 +53,6 @@ export class AdminController {
     @CurrentUser() user: any,
     @Param('id') userId: string,
   ) {
-    if (!user.isAdmin) {
-      throw new ForbiddenException('Acesso negado. Apenas administradores.');
-    }
     
     if (user.id === userId) {
       throw new ForbiddenException('Você não pode excluir sua própria conta.');
@@ -79,9 +63,6 @@ export class AdminController {
 
   @Get('categories')
   async getAllCategories(@CurrentUser() user: any) {
-    if (!user.isAdmin) {
-      throw new ForbiddenException('Acesso negado. Apenas administradores.');
-    }
     return this.adminService.getAllCategories();
   }
 
@@ -90,9 +71,6 @@ export class AdminController {
     @CurrentUser() user: any,
     @Body() data: { name: string; slug: string; description?: string },
   ) {
-    if (!user.isAdmin) {
-      throw new ForbiddenException('Acesso negado. Apenas administradores.');
-    }
     return this.adminService.createCategory(data);
   }
 
@@ -102,9 +80,6 @@ export class AdminController {
     @Param('id') categoryId: string,
     @Body() data: { name?: string; description?: string },
   ) {
-    if (!user.isAdmin) {
-      throw new ForbiddenException('Acesso negado. Apenas administradores.');
-    }
     return this.adminService.updateCategory(categoryId, data);
   }
 
@@ -113,9 +88,6 @@ export class AdminController {
     @CurrentUser() user: any,
     @Param('id') categoryId: string,
   ) {
-    if (!user.isAdmin) {
-      throw new ForbiddenException('Acesso negado. Apenas administradores.');
-    }
     return this.adminService.deleteCategory(categoryId);
   }
 }

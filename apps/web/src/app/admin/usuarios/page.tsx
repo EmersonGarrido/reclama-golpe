@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { getApiUrl } from '@/config/api'
+import MaskedData from '@/components/MaskedData'
 
 interface User {
   id: string

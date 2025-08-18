@@ -486,7 +486,7 @@ export class ScamsService {
     };
   }
 
-  async reportScam(scamId: string, reportData: { reason: string; description: string; email?: string; userId: string }) {
+  async reportScam(scamId: string, reportData: { reason: string; description: string; email?: string; userId: string | null }) {
     const scam = await this.prisma.scam.findUnique({
       where: { id: scamId },
     });
@@ -495,13 +495,25 @@ export class ScamsService {
       throw new NotFoundException('Denúncia não encontrada');
     }
 
+    // Permitir reports anônimos (userId pode ser null)
+    const reportDataToSave: any = {
+      scamId,
+      reason: reportData.reason as any,
+      details: reportData.description,
+    };
+
+    // Adicionar userId apenas se existir
+    if (reportData.userId) {
+      reportDataToSave.userId = reportData.userId;
+    }
+
+    // Adicionar email se fornecido (para contato em reports anônimos)
+    if (reportData.email) {
+      reportDataToSave.reporterEmail = reportData.email;
+    }
+
     const report = await this.prisma.report.create({
-      data: {
-        scamId,
-        reason: reportData.reason as any,
-        details: reportData.description,
-        userId: reportData.userId,
-      },
+      data: reportDataToSave,
     });
 
     return {

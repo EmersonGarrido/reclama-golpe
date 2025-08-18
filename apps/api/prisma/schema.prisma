@@ -128,18 +128,19 @@ model Like {
 }
 
 model Report {
-  id        String       @id @default(uuid())
-  reason    ReportReason
-  details   String?      @db.Text
-  status    ReportStatus @default(PENDING)
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  id            String       @id @default(uuid())
+  reason        ReportReason
+  details       String?      @db.Text
+  status        ReportStatus @default(PENDING)
+  reporterEmail String?      // Email para contato em reports anônimos
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
   
-  userId    String
-  user      User         @relation(fields: [userId], references: [id])
+  userId        String?      // Opcional para permitir reports anônimos
+  user          User?        @relation(fields: [userId], references: [id])
   
-  scamId    String
-  scam      Scam         @relation(fields: [scamId], references: [id], onDelete: Cascade)
+  scamId        String
+  scam          Scam         @relation(fields: [scamId], references: [id], onDelete: Cascade)
 
   @@index([status])
   @@map("reports")

@@ -1,5 +1,7 @@
 'use client'
 
+import { getApiUrl } from '@/config/api'
+
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -66,7 +68,7 @@ export default function AdminEstatisticasPage() {
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('http://localhost:3333/admin/stats', {
+      const response = await fetch(getApiUrl('admin/stats'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }

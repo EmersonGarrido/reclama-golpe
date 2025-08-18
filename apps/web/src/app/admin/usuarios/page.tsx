@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { getApiUrl } from '@/config/api'
 
 interface User {
   id: string
@@ -53,7 +54,7 @@ export default function AdminUsuariosPage() {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('http://localhost:3333/admin/users', {
+      const response = await fetch(getApiUrl('admin/users'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -74,7 +75,7 @@ export default function AdminUsuariosPage() {
     if (confirm(`Tem certeza que deseja ${currentStatus ? 'remover' : 'conceder'} privilégios de admin?`)) {
       try {
         const token = localStorage.getItem('token')
-        const response = await fetch(`http://localhost:3333/admin/users/${userId}/toggle-admin`, {
+        const response = await fetch(getApiUrl(`admin/users/${userId}/toggle-admin`), {
           method: 'PATCH',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -96,7 +97,7 @@ export default function AdminUsuariosPage() {
     if (confirm('Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita.')) {
       try {
         const token = localStorage.getItem('token')
-        const response = await fetch(`http://localhost:3333/admin/users/${userId}`, {
+        const response = await fetch(getApiUrl(`admin/users/${userId}`), {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`

@@ -1,5 +1,7 @@
 'use client'
 
+import { getApiUrl } from '@/config/api'
+
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -49,7 +51,7 @@ export default function AdminReportsPage() {
   const fetchReports = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('http://localhost:3333/admin/reports', {
+      const response = await fetch(getApiUrl('admin/reports'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -82,7 +84,7 @@ export default function AdminReportsPage() {
       if (!report) return
 
       // Atualizar status do report
-      const response = await fetch(`http://localhost:3333/reports/${reportId}`, {
+      const response = await fetch(getApiUrl(`reports/${reportId}`), {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -96,7 +98,7 @@ export default function AdminReportsPage() {
       if (response.ok) {
         // Se bloquear a denúncia, atualizar seu status
         if (action === 'block-scam') {
-          await fetch(`http://localhost:3333/scams/${report.scam.id}`, {
+          await fetch(getApiUrl(`scams/${report.scam.id}`), {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',

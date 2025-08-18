@@ -1,5 +1,7 @@
 'use client'
 
+import { getApiUrl } from '@/config/api'
+
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 
@@ -65,7 +67,7 @@ export default function ScamDetailModal({
   const fetchScamDetails = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`http://localhost:3333/scams/${scamId}`, {
+      const response = await fetch(getApiUrl(`scams/${scamId}`), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -392,7 +394,7 @@ export default function ScamDetailModal({
                                 {isImage ? (
                                   <div className="relative group">
                                     <img
-                                      src={file.startsWith('http') ? file : `http://localhost:3333/uploads/${file}`}
+                                      src={file.startsWith('http') ? file : getApiUrl(`uploads/${file}`)}
                                       alt={`Evidência ${index + 1}`}
                                       className="w-full h-48 object-cover"
                                       onError={(e) => {
@@ -403,7 +405,7 @@ export default function ScamDetailModal({
                                     />
                                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center">
                                       <a
-                                        href={file.startsWith('http') ? file : `http://localhost:3333/uploads/${file}`}
+                                        href={file.startsWith('http') ? file : getApiUrl(`uploads/${file}`)}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="opacity-0 group-hover:opacity-100 bg-white text-gray-900 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
@@ -421,7 +423,7 @@ export default function ScamDetailModal({
                                       <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M10,19L8,14H10L11,17L12,14H14L12,19H10Z"/>
                                     </svg>
                                     <a
-                                      href={file.startsWith('http') ? file : `http://localhost:3333/uploads/${file}`}
+                                      href={file.startsWith('http') ? file : getApiUrl(`uploads/${file}`)}
                                       target="_blank"
                                       rel="noopener noreferrer"
                                       className="text-blue-600 hover:text-blue-700 text-sm font-medium underline"
@@ -436,7 +438,7 @@ export default function ScamDetailModal({
                                       <path d="M13,9H18.5L13,3.5V9M6,2H14L20,8V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V4C4,2.89 4.89,2 6,2M15,18V16H6V18H15M18,14V12H6V14H18Z"/>
                                     </svg>
                                     <a
-                                      href={file.startsWith('http') ? file : `http://localhost:3333/uploads/${file}`}
+                                      href={file.startsWith('http') ? file : getApiUrl(`uploads/${file}`)}
                                       target="_blank"
                                       rel="noopener noreferrer"
                                       className="text-blue-600 hover:text-blue-700 text-sm font-medium underline"

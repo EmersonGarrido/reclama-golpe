@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { isAuthenticated, getUser } from '@/lib/auth'
+import { getApiUrl } from '@/config/api'
 import SystemInfo from '@/components/admin/SystemInfo'
 
 interface SystemStats {
@@ -53,7 +54,7 @@ export default function AdminDashboard() {
       const token = localStorage.getItem('token')
       
       // Buscar estatísticas do sistema
-      const response = await fetch('http://localhost:3333/admin/stats', {
+      const response = await fetch(getApiUrl('admin/stats'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }

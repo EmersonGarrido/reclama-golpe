@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { getApiUrl } from '@/config/api'
 
 interface Category {
   id: string
@@ -127,7 +128,7 @@ export default function AdminCategoriasPage() {
   const fetchCategories = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch('http://localhost:3333/admin/categories', {
+      const response = await fetch(getApiUrl('admin/categories'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -156,7 +157,7 @@ export default function AdminCategoriasPage() {
 
   const fetchCategoryStats = async (categorySlug: string) => {
     try {
-      const response = await fetch(`http://localhost:3333/scams?category=${categorySlug}`)
+      const response = await fetch(getApiUrl(`scams?category=${categorySlug}`))
       if (response.ok) {
         const data = await response.json()
         return data.total || 0
@@ -183,7 +184,7 @@ export default function AdminCategoriasPage() {
 
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`http://localhost:3333/admin/categories/${editingCategory.id}`, {
+      const response = await fetch(getApiUrl(`admin/categories/${editingCategory.id}`), {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -220,7 +221,7 @@ export default function AdminCategoriasPage() {
       const token = localStorage.getItem('token')
       const slug = formData.name.toUpperCase().replace(/\s+/g, '_')
       
-      const response = await fetch('http://localhost:3333/admin/categories', {
+      const response = await fetch(getApiUrl('admin/categories'), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

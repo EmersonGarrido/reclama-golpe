@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { isAuthenticated, getUser } from '@/lib/auth'
+import { getApiUrl } from '@/config/api'
 import ScamDetailModal from '@/components/admin/ScamDetailModal'
 
 interface Scam {
@@ -63,7 +64,7 @@ export default function AdminScamsPage() {
       else if (filter === 'resolved') statusFilter = '&isResolved=true'
       
       const response = await fetch(
-        `http://localhost:3333/scams/admin?page=${page}&limit=20${statusFilter}`,
+        getApiUrl(`scams/admin?page=${page}&limit=20${statusFilter}`),
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -86,7 +87,7 @@ export default function AdminScamsPage() {
   const handleStatusChange = async (scamId: string, newStatus: string) => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`http://localhost:3333/scams/${scamId}`, {
+      const response = await fetch(getApiUrl(`scams/${scamId}`), {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -108,7 +109,7 @@ export default function AdminScamsPage() {
   const handleDelete = async (scamId: string) => {
     try {
       const token = localStorage.getItem('token')
-      const response = await fetch(`http://localhost:3333/scams/${scamId}`, {
+      const response = await fetch(getApiUrl(`scams/${scamId}`), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
